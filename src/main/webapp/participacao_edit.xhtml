@@ -1,0 +1,54 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form prependId="false" rendered="#{securityContext.loggedIn}">
+
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{messages['button.save']}" action="#{participacaoEditMB.insert}"
+						rendered="#{!participacaoEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.save']}" action="#{participacaoEditMB.update}"
+						rendered="#{participacaoEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.delete']}" onclick="confirmation.show()"
+						rendered="#{participacaoEditMB.updateMode}" type="button" immediate="true" ajax="false" />
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.delete']}" severity="alert" widgetVar="confirmation">
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{participacaoEditMB.delete}" immediate="true"
+							ajax="false" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br />
+
+			<p:fieldset legend="#{messages['participacao.label']}" toggleable="true" toggleSpeed="500">
+				<h:panelGrid id="fields" columns="3">
+					
+					<h:outputLabel value="#{messages['participacao.label.idPart']}: " for="idPart" styleClass="text-input" />
+					<h:outputText id="idPart" value="#{participacaoEditMB.bean.idPart}" />
+					<p:message for="idPart" />
+					
+					<h:outputLabel value="#{messages['participacao.label.culto']}: " for="culto" styleClass="text-input" />
+					<p:inputText id="culto" value="#{participacaoEditMB.bean.culto}"
+						title="#{messages['participacao.alt.culto']}" />
+					<p:message for="culto" />
+					
+					<h:outputLabel value="#{messages['participacao.label.membro']}: " for="membro" styleClass="text-input" />
+					<p:inputText id="membro" value="#{participacaoEditMB.bean.membro}"
+						title="#{messages['participacao.alt.membro']}" />
+					<p:message for="membro" />
+					
+					<h:outputLabel value="#{messages['participacao.label.obs']}: " for="obs" styleClass="text-input" />
+					<p:inputText id="obs" value="#{participacaoEditMB.bean.obs}"
+						title="#{messages['participacao.alt.obs']}" />
+					<p:message for="obs" />
+					
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>

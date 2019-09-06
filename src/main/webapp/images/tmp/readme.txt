@@ -1,0 +1,1 @@
+Pasta para captura temporaria pela webcam 

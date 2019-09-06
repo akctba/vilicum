@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="iso-8859-1"?>  
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form rendered="#{securityContext.loggedIn}">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton title="#{messages['button.new']}" icon="ui-icon-document" action="#{pastorListMB.getNextView}"
+						actionListener="#{pastorListMB.clear}" ajax="false" />
+
+					<p:commandButton title="#{messages['button.delete']}" icon="ui-icon-trash" onclick="confirmation.show()"
+						type="button" immediate="true" ajax="false" />
+
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.alert']}!" severity="alert" widgetVar="confirmation">
+
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{pastorListMB.deleteSelection}"
+							actionListener="#{pastorListMB.clear}" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<p:dataTable id="list" var="bean" value="#{pastorListMB.resultList}">
+				<f:facet name="header">#{messages['pastor.list.table.title']}</f:facet>
+				<p:column style="width:1%;">
+					<h:selectBooleanCheckbox value="#{pastorListMB.selection[bean.idPastor]}"></h:selectBooleanCheckbox>
+				</p:column>
+				
+				<p:column style="width:5%;" sortBy="#{bean.idPastor}">
+					<f:facet name="header">#{messages['pastor.label.idPastor']}</f:facet>
+					<h:outputText value="#{bean.idPastor}" />
+				</p:column>
+						
+				<p:column sortBy="#{bean.nome}">
+					<f:facet name="header">#{messages['pastor.label.nome']}</f:facet>
+					<h:commandLink action="#{pastorListMB.getNextView}" actionListener="#{pastorListMB.clear}">
+						<h:outputText value="#{bean.nome}" />
+						<f:param name="id" value="#{bean.idPastor}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.anoFormacao}">
+					<f:facet name="header">#{messages['pastor.label.anoFormacao']}</f:facet>
+					<h:commandLink action="#{pastorListMB.getNextView}" actionListener="#{pastorListMB.clear}">
+						<h:outputText value="#{bean.anoFormacao}" />
+						<f:param name="id" value="#{bean.idPastor}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.email}">
+					<f:facet name="header">#{messages['pastor.label.email']}</f:facet>
+					<h:commandLink action="#{pastorListMB.getNextView}" actionListener="#{pastorListMB.clear}">
+						<h:outputText value="#{bean.email}" />
+						<f:param name="id" value="#{bean.idPastor}" />
+					</h:commandLink>
+				</p:column>
+				
+				<p:column sortBy="#{bean.nascimento}">
+					<f:facet name="header">#{messages['pastor.label.nascimento']}</f:facet>
+					<h:commandLink action="#{pastorListMB.getNextView}" actionListener="#{pastorListMB.clear}">
+						<h:outputText value="#{bean.nascimento}" >
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						<f:param name="id" value="#{bean.idPastor}" />
+					</h:commandLink>
+				</p:column>
+				
+				<p:column sortBy="#{bean.nomeEsposa}">
+					<f:facet name="header">#{messages['pastor.label.nomeEsposa']}</f:facet>
+					<h:commandLink action="#{pastorListMB.getNextView}" actionListener="#{pastorListMB.clear}">
+						<h:outputText value="#{bean.nomeEsposa}" />
+						<f:param name="id" value="#{bean.idPastor}" />
+					</h:commandLink>
+				</p:column>
+						
+				<!-- <p:column sortBy="#{bean.congregacoes}">
+					<f:facet name="header">#{messages['pastor.label.congregacoes']}</f:facet>
+					<h:commandLink action="#{pastorListMB.getNextView}" actionListener="#{pastorListMB.clear}">
+						<h:outputText value="#{bean.congregacoes}" />
+						<f:param name="id" value="#{bean.idPastor}" />
+					</h:commandLink>
+				</p:column> -->
+						
+				<!-- <p:column sortBy="#{bean.cadastro}">
+					<f:facet name="header">#{messages['pastor.label.cadastro']}</f:facet>
+					<h:commandLink action="#{pastorListMB.getNextView}" actionListener="#{pastorListMB.clear}">
+						<h:outputText value="#{bean.cadastro}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						<f:param name="id" value="#{bean.id}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.exclusao}">
+					<f:facet name="header">#{messages['pastor.label.exclusao']}</f:facet>
+					<h:commandLink action="#{pastorListMB.getNextView}" actionListener="#{pastorListMB.clear}">
+						<h:outputText value="#{bean.exclusao}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						<f:param name="id" value="#{bean.id}" />
+					</h:commandLink>
+				</p:column> -->
+						
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

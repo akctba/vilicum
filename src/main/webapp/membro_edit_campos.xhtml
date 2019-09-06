@@ -1,0 +1,236 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/popup.xhtml">
+
+	<ui:define name="body">
+		<h:form prependId="false" rendered="#{securityContext.loggedIn}">
+
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{messages['button.save']}" action="#{membroEditMB.insert}"
+						rendered="#{!membroEditMB.updateMode}" ajax="false" id="btnsalvar" />
+					<p:commandButton value="#{messages['button.save']}" action="#{membroEditMB.update}"
+						rendered="#{membroEditMB.updateMode}" ajax="false" />
+					
+					<p:commandButton value="#{messages['button.desligar']}" onclick="wsaida.show()"
+						rendered="#{membroEditMB.updateMode}" type="button" immediate="true" ajax="false" />
+					<p:confirmDialog message="#{messages['label.confirm.saida']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.saida']}" severity="alert" widgetVar="wsaida">
+						<h:panelGrid columns="3">
+							<h:outputLabel value="#{messages['membro.label.motivoInativo']}: " for="motivoInativo" styleClass="text-input" />
+							<p:inputText id="motivoInativo" value="#{membroEditMB.bean.motivoInativo}"
+								title="#{messages['membro.alt.motivoInativo']}" />
+							<p:message for="motivoInativo" />
+							
+							<h:outputLabel value="#{messages['membro.label.dataSaida']}: " for="dataSaida" styleClass="text-input" />
+							<p:calendar id="dataSaida" value="#{membroEditMB.bean.dataSaida}"
+							   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+							   locale="#{locales.currentLocale}" title="#{messages['membro.alt.dataSaida']}" />
+							<p:message for="dataSaida" />
+							
+							<p:commandButton value="#{messages['button.save']}" action="#{membroEditMB.update}"
+							rendered="#{membroEditMB.updateMode}" ajax="false" />
+							
+						</h:panelGrid>
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br/> 
+			
+			<p:fieldset legend="#{messages['membro.label']}" toggleable="true" toggleSpeed="500">
+				<h:panelGrid id="fields" columns="6" width="100%">
+					<h:outputLabel value="#{messages['membro.label.familia']}: " for="familia" styleClass="text-input" />
+					<p:selectOneMenu id="familia" value="#{membroEditMB.bean.familia}" effect="fade"
+									converter="simpleEntityConverter"
+									required="true"
+									requiredMessage="é necessário selecionar a família."
+									filter="true" filterMatchMode="contains">  
+			            <f:selectItem itemLabel="Selecione a família" itemValue="" />  
+			            <f:selectItems value="#{membroEditMB.familias}" var="c" itemLabel="#{c.nome}" itemValue="#{c}"/>  
+			            
+			            <p:column>
+			                <h:outputText value="#{c.nome}" />
+			            </p:column>
+			            <p:column>
+			                <h:outputText value="#{c.rua}" />
+			            </p:column>
+			            
+			        </p:selectOneMenu>
+					<p:message for="familia" />
+					
+					<h:outputLabel value="#{messages['membro.label.ativo']}: " />
+					<h:outputText value="#{messages['sim']}" rendered="#{membroEditMB.bean.ativo}" />
+					<h:outputText value="#{messages['nao']}" rendered="#{!membroEditMB.bean.ativo}" />
+					<p:spacer/>
+					
+					<h:outputLabel value="#{messages['membro.label.nome']}: " for="nome" styleClass="text-input" />
+					<p:inputText id="nome" value="#{membroEditMB.bean.nome}"
+						title="#{messages['membro.alt.nome']}" size="40"/>
+					<p:message for="nome" />
+					
+					<h:outputLabel value="#{messages['membro.label.formaIngresso']}: " for="formaIngresso" styleClass="text-input" />
+					<p:selectOneMenu id="formaIngresso" value="#{membroEditMB.bean.formaIngresso}" effect="fade"
+									converter="simpleEntityConverter"
+									required="true"
+									requiredMessage="é necessário selecionar a forma de ingresso.">  
+			            <f:selectItem itemLabel="Selecione" itemValue="" />  
+			            <f:selectItems value="#{membroEditMB.ingressos}" var="c" itemLabel="#{c.forma}" itemValue="#{c}"/>  
+			        </p:selectOneMenu>
+					<p:message for="formaIngresso" />
+					
+					<h:outputLabel value="#{messages['membro.label.nascimento']}: " for="nascimento" styleClass="text-input" />
+					<p:calendar id="nascimento" value="#{membroEditMB.bean.nascimento}" 
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="pt" title="#{messages['membro.alt.nascimento']}" />
+					   <p:message for="nascimento" />
+								
+					<h:outputLabel value="#{messages['membro.label.sexo']}: " for="sexo" styleClass="text-input" />
+					<p:selectOneMenu id="sexo" value="#{membroEditMB.bean.sexo}">
+                		<f:selectItem itemLabel="Selecione" />
+                		<f:selectItems var="g" value="#{membroEditMB.generos}"
+                    	itemValue="#{g}" itemLabel="#{g}" />
+            		</p:selectOneMenu>
+					<p:message for="sexo" />
+					
+					<h:outputLabel value="#{messages['membro.label.estadoCivil']}: " for="estadoCivil" styleClass="text-input" />
+					<p:selectOneMenu id="estadoCivil" value="#{membroEditMB.bean.estadoCivil}">
+                		<f:selectItem itemLabel="Selecione" />
+                		<f:selectItems var="ec" value="#{membroEditMB.estadoCivis}"
+                    	itemValue="#{ec}" itemLabel="#{ec}" />
+            		</p:selectOneMenu>
+					<p:message for="estadoCivil" />
+					
+					<h:outputLabel value="#{messages['membro.label.comungante']}: " for="comungante" styleClass="text-input" />
+					<h:selectBooleanCheckbox id="comungante" value="#{membroEditMB.bean.comungante}" title="#{messages['membro.alt.comungante']}" />
+					<p:message for="comungante" />
+					
+					<h:outputLabel value="#{messages['membro.label.responsavelFamilia']}: " for="responsavelFamilia" styleClass="text-input" />
+					<h:selectBooleanCheckbox id="responsavelFamilia" value="#{membroEditMB.bean.responsavelFamilia}" title="#{messages['membro.alt.responsavelFamilia']}" />
+					<p:message for="responsavelFamilia" />
+					
+					<h:outputLabel value="#{messages['membro.label.comungantedesde']}: " for="comungantedesde" styleClass="text-input" />
+					<p:calendar id="comungantedesde" value="#{membroEditMB.bean.comungantedesde}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['membro.alt.comungantedesde']}" />
+					   <p:message for="comungantedesde" />
+					
+				</h:panelGrid>
+			</p:fieldset>	
+			
+			<h:panelGrid columns="2" width="100%">
+				<p:fieldset legend="#{messages['membro.label.preechimento']}" toggleable="false">
+					<p:progressBar value="#{membroEditMB.bean.percCadastro}" labelTemplate="{value}%" 
+					displayOnly="true" style="width:80%;" styleClass="cad-bar-style" />
+				</p:fieldset>
+				<p:fieldset legend="#{messages['membro.label2']}" toggleable="true" toggleSpeed="500">
+					<h:panelGrid id="fields2" columns="6" width="100%">
+						
+						<h:outputLabel value="#{messages['membro.label.celular']}: " for="celular" styleClass="text-input" />
+						<p:inputMask id="celular" value="#{membroEditMB.bean.celular}"
+							mask="(99) 9999-9999"
+							title="#{messages['membro.alt.celular']}" />
+						<p:message for="celular" />
+						
+						<h:outputLabel value="#{messages['membro.label.email']}: " for="email" styleClass="text-input" />
+						<p:inputText id="email" value="#{membroEditMB.bean.email}" type="email"
+							title="#{messages['membro.alt.email']}" size="60"/>
+						<p:message for="email" />
+						
+					</h:panelGrid>
+				</p:fieldset>
+			</h:panelGrid>
+			
+			<p:fieldset legend="#{messages['membro.label3']}" toggleable="true" toggleSpeed="500">
+				<h:panelGrid id="fields3" columns="6">
+				
+					<h:outputLabel value="#{messages['membro.label.dataEntrada']}: " for="dataEntrada" styleClass="text-input" />
+					<p:calendar id="dataEntrada" value="#{membroEditMB.bean.dataEntrada}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['membro.alt.dataEntrada']}" />
+					   <p:message for="dataEntrada" />
+					   
+					<h:outputLabel value="#{messages['membro.label.dataSaida']}: " styleClass="text-input" />
+					<h:outputText value="#{membroEditMB.bean.dataSaida}" >
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+					<p:spacer/>
+					
+					<h:outputLabel value="#{messages['membro.label.motivoInativo']}: " styleClass="text-input" 
+						rendered="#{membroEditMB.bean.motivoInativo}!=null"/>
+					<h:outputText value="#{membroEditMB.bean.motivoInativo}" />
+					<p:spacer/>
+				
+				</h:panelGrid>
+			</p:fieldset>
+				<br/>
+			<p:fieldset legend="#{messages['membro.label4']}" toggleable="true" toggleSpeed="500">
+				<h:panelGrid id="fields4" columns="6" width="100%">
+					
+					<h:outputLabel value="#{messages['membro.label.localNascimento']}: " for="localNascimento" styleClass="text-input" />
+					<p:inputText id="localNascimento" value="#{membroEditMB.bean.localNascimento}"
+						title="#{messages['membro.alt.localNascimento']}" />
+					<p:message for="localNascimento" />
+					
+					<h:outputLabel value="#{messages['membro.label.dataBatismo']}: " for="dataBatismo" styleClass="text-input" />
+					<p:calendar id="dataBatismo" value="#{membroEditMB.bean.dataBatismo}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['membro.alt.dataBatismo']}" />
+					   <p:message for="dataBatismo" />
+								
+					<h:outputLabel value="#{messages['membro.label.localBatismo']}: " for="localBatismo" styleClass="text-input" />
+					<p:inputText id="localBatismo" value="#{membroEditMB.bean.localBatismo}"
+						title="#{messages['membro.alt.localBatismo']}" />
+					<p:message for="localBatismo" />
+					
+					<h:outputLabel value="#{messages['membro.label.dataCasamento']}: " for="dataCasamento" styleClass="text-input" />
+					<p:calendar id="dataCasamento" value="#{membroEditMB.bean.dataCasamento}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['membro.alt.dataCasamento']}" />
+					   <p:message for="dataCasamento" />
+					
+					<h:outputLabel value="#{messages['membro.label.localCasamento']}: " for="localCasamento" styleClass="text-input" />
+					<p:inputText id="localCasamento" value="#{membroEditMB.bean.localCasamento}"
+						title="#{messages['membro.alt.localCasamento']}" />
+					<p:message for="localCasamento" />
+					
+					<h:outputLabel value="#{messages['membro.label.profissao']}: " for="profissao" styleClass="text-input" />
+					<p:inputText id="profissao" value="#{membroEditMB.bean.profissao}"
+						title="#{messages['membro.alt.profissao']}" />
+					<p:message for="profissao" />
+					
+					<h:outputLabel value="#{messages['membro.label.excluir']}: " for="excluir" styleClass="text-input" />
+					<h:selectBooleanCheckbox id="excluir" value="#{membroEditMB.bean.excluir}" title="#{messages['membro.alt.excluir']}" />
+					<p:message for="excluir" />
+					
+					<h:outputLabel value="#{messages['membro.label.recadastro']}: " for="recadastro" styleClass="text-input" />
+					<p:calendar id="recadastro" value="#{membroEditMB.bean.recadastro}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['membro.alt.recadastro']}" />
+					   <p:message for="recadastro" />
+					
+					<h:outputLabel value="#{messages['membro.label.cadastro']}: " for="cadastro" styleClass="text-input" />
+					<h:outputText id="cadastro" value="#{membroEditMB.bean.cadastro}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+					</h:outputText>
+					   <p:message for="cadastro" />
+					
+					<h:outputLabel value="#{messages['membro.label.alteracao']}: " for="alteracao" styleClass="text-input" />
+					<h:outputText id="alteracao" value="#{membroEditMB.bean.alteracao}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+					</h:outputText>
+					   <p:message for="alteracao" />
+				</h:panelGrid>
+			</p:fieldset>
+			<br />
+			<p:fieldset legend="#{messages['membro.label5']}" collapsed="true" toggleable="true" toggleSpeed="500">
+				<h:panelGrid id="fields5" columns="1" width="100%" title="#{messages['membro.alt.observacoes']}">
+					<p:message for="observacoes" />
+					<p:editor id="observacoes" value="#{membroEditMB.bean.observacoes}" width="800"
+					controls="undo redo | bold italic underline | size color | paste pastetext | source"/>
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>

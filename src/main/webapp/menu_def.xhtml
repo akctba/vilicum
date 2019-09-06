@@ -1,0 +1,85 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<h:form>
+		<p:menubar rendered="#{securityContext.loggedIn}">
+
+			<p:submenu label="#{messages['menu.adm']}" rendered="#{securityContext.hasRole('Admin')}">
+				
+				<p:submenu label="#{messages['menu.usuario']}">
+					<p:menuitem value="#{messages['menu.menuitem.new']}" url="/usuario_edit.jsf"></p:menuitem>
+					<p:menuitem value="#{messages['menu.menuitem.list']}" url="/usuario_list.jsf"></p:menuitem>
+				</p:submenu>
+							
+				<p:submenu label="#{messages['menu.congregacao']}">
+					<p:menuitem value="#{messages['menu.menuitem.new']}" url="/congregacao_edit.jsf"></p:menuitem>
+					<p:menuitem value="#{messages['menu.menuitem.list']}" url="/congregacao_list.jsf"></p:menuitem>
+				</p:submenu>
+	
+				<p:submenu label="#{messages['menu.pastor']}">
+					<p:menuitem value="#{messages['menu.menuitem.new']}" url="/pastor_edit.jsf"></p:menuitem>
+					<p:menuitem value="#{messages['menu.menuitem.list']}" url="/pastor_list.jsf"></p:menuitem>
+				</p:submenu>
+				
+				<p:submenu label="#{messages['menu.congregacaoPastor']}">
+					<p:menuitem value="#{messages['menu.menuitem.new']}" url="/congregacaoPastor_edit.jsf"></p:menuitem>
+					<p:menuitem value="#{messages['menu.menuitem.list']}" url="/congregacaoPastor_list.jsf"></p:menuitem>
+				</p:submenu>
+				
+				<p:submenu label="#{messages['menu.ingresso']}">
+					<p:menuitem value="#{messages['menu.menuitem.new']}" url="/ingresso_edit.jsf"></p:menuitem>
+					<p:menuitem value="#{messages['menu.menuitem.list']}" url="/ingresso_list.jsf"></p:menuitem>
+				</p:submenu>
+				
+				<p:submenu label="#{messages['menu.perfil']}">
+					<p:menuitem value="#{messages['menu.menuitem.new']}" url="/perfil_edit.jsf"></p:menuitem>
+					<p:menuitem value="#{messages['menu.menuitem.list']}" url="/perfil_list.jsf"></p:menuitem>
+				</p:submenu>
+				
+				<p:submenu label="#{messages['menu.alerta']}">
+					<p:menuitem value="#{messages['menu.menuitem.new']}" url="/alerta_edit.jsf"></p:menuitem>
+					<p:menuitem value="#{messages['menu.menuitem.list']}" url="/alerta_list.jsf"></p:menuitem>
+				</p:submenu>
+				
+				<p:submenu label="#{messages['menu.bookmark']}">
+					<p:menuitem value="#{messages['menu.menuitem.new']}" url="/bookmark_edit.jsf" />
+					<p:menuitem value="#{messages['menu.menuitem.list']}" url="/bookmark_list.jsf" />
+				</p:submenu>
+			</p:submenu>
+			
+			<p:submenu label="#{messages['menu.cadastro']}" rendered="#{!securityContext.user.trocarSenha}">
+				<p:menuitem value="#{messages['menu.familia']}" url="/familia_list.jsf"></p:menuitem>
+	
+				<p:menuitem value="#{messages['menu.membro']}" url="/membro_list.jsf"></p:menuitem>
+
+				<p:separator/>
+				<p:menuitem value="#{messages['menu.culto']}" url="/culto_lista.jsf" rendered="#{securityContext.hasRole('Secretaria')}"></p:menuitem>
+				
+				<p:menuitem value="#{messages['menu.participacao']}" url="/participacao_list.jsf" rendered="#{securityContext.hasRole('Admin')}"></p:menuitem>
+				
+			</p:submenu>
+			
+			<p:submenu label="Listagens">
+				<p:menuitem value="Membros ativos" action="#{relFamiliasMB.showReport}" ajax="false" target="_new" rendered="#{securityContext.hasRole('Admin')}"></p:menuitem>
+				<p:menuitem value="Ofertantes" url="/ofertantes.jsf"></p:menuitem>
+				<p:menuitem value="Crianças" url="/criancas.jsf"></p:menuitem>
+				<p:menuitem value="Membros afastados" url="/membro_participacao.jsf"></p:menuitem>
+				<p:menuitem value="Aniversariantes" url="/aniversariantes.jsf"></p:menuitem>
+				<p:menuitem value="Analise do cadastro" url="/analisecadastro.jsf"></p:menuitem>
+			</p:submenu>
+			
+			<p:submenu label="Secretaria" rendered="#{!securityContext.user.trocarSenha}">
+				<!-- registrar contato -->
+				<p:menuitem value="Relatório Secretaria" url="/rel_estatistica.jsf"></p:menuitem>
+			</p:submenu>
+			
+			<p:submenu label="#{messages['menu.deptos']}" rendered="#{!securityContext.user.trocarSenha}">
+				<p:menuitem value="#{messages['menu.departamento']}" url="/departamento_list.jsf"></p:menuitem>
+			</p:submenu>
+
+			<p:menuitem value="#{messages['menu.menuitem.quit']}" action="#{securityContext.logout}" />
+		</p:menubar>
+	</h:form>
+
+</ui:composition>

@@ -1,0 +1,105 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form rendered="#{securityContext.loggedIn}">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton title="#{messages['button.new']}" icon="ui-icon-document" action="#{cultoListMB.getNextView}"
+						actionListener="#{cultoListMB.clear}" ajax="false" />
+
+					<p:commandButton title="#{messages['button.delete']}" icon="ui-icon-trash" onclick="confirmation.show()"
+						type="button" immediate="true" ajax="false" />
+						
+					<p:commandButton type="button" icon="ui-icon-print" title="#{messages['print']}">
+				        <p:printer target="list" />
+				    </p:commandButton>
+
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.alert']}!" severity="alert" widgetVar="confirmation">
+
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{cultoListMB.deleteSelection}"
+							actionListener="#{cultoListMB.clear}" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<p:dataTable id="list" var="bean" value="#{cultoListMB.resultList}" emptyMessage="Nenhum registro"
+			 paginator="true" rows="20" 
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
+				<f:facet name="header"><h:outputText value="#{messages['culto.list.table.title']}"/></f:facet>
+				<p:column style="width:1%;">
+					<h:selectBooleanCheckbox value="#{cultoListMB.selection[bean.idCulto]}"></h:selectBooleanCheckbox>
+				</p:column>
+				
+				<p:column style="width:5%;" sortBy="#{bean.idCulto}" rendered="#{securityContext.hasRole('Admin')}">
+					<f:facet name="header"><h:outputText value="#{messages['culto.label.idCulto']}"/></f:facet>
+					<h:outputText value="#{bean.idCulto}" />
+				</p:column>
+				
+				<p:column filterBy="#{bean.data}" sortBy="#{bean.data}">
+					<f:facet name="header"><h:outputText value="#{messages['culto.label.data']}"/></f:facet>
+					<h:commandLink action="#{cultoListMB.getNextView}" actionListener="#{cultoListMB.clear}">
+						<h:outputText value="#{bean.data}" >
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						<f:param name="id" value="#{bean.idCulto}" />
+					</h:commandLink>
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header"><h:outputText value="#{messages['culto.label.pastor']}"/></f:facet>
+					<h:outputText value="#{bean.pastor.nome}" rendered="#{bean.pastor != null}" />
+					<h:outputText value="#{messages['culto.label.diacono']}" rendered="#{bean.pastor == null}" />
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header"><h:outputText value="#{messages['culto.label.programa']}"/></f:facet>
+					<h:outputText value="#{bean.programa}" />
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header"><h:outputText value="#{messages['culto.label.adultos']}"/></f:facet>
+					<h:outputText value="#{bean.adultos}" />
+				</p:column>
+						
+				<p:column>
+					<f:facet name="header"><h:outputText value="#{messages['culto.label.criancas']}"/></f:facet>
+					<h:outputText value="#{bean.criancas}" />
+				</p:column>
+						
+				<p:column>
+					<f:facet name="header"><h:outputText value="#{messages['culto.label.visitantes']}"/></f:facet>
+					<h:outputText value="#{bean.visitantes}" />
+				</p:column>
+						
+				<p:column>
+					<f:facet name="header"><h:outputText value="#{messages['culto.label.participantes']}"/></f:facet>
+					<h:outputText value="#{bean.participantes}" />
+				</p:column>
+				
+				<!-- <p:column>
+					<f:facet name="header"><h:outputText value="#{messages['culto.label.participacoes']}"/></f:facet>
+					<h:commandLink value="Part" action="#{participacaoMB.porculto(id)}">
+						<f:param name="id" value="#{bean.idCulto}" />
+					</h:commandLink>
+				</p:column> -->
+				
+				<p:column rendered="#{securityContext.hasRole('Admin')}">
+					<f:facet name="header"><h:outputText value="#{messages['culto.label.participacoes']}"/></f:facet>
+					<h:outputText value="#{bean.santaceia.size()}" rendered="#{bean.santaceia != null}" />
+				</p:column>
+				
+				<p:column rendered="#{securityContext.hasRole('Admin')}">
+					<f:facet name="header"><h:outputText value="#{messages['culto.label.congregacao']}"/></f:facet>
+					<h:outputText value="#{bean.congregacao.nome}" rendered="#{bean.congregacao != null}" />
+				</p:column>
+				
+						
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,77 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form prependId="false">
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{messages['button.save']}" action="#{registroPastoralEditMB.insert}"
+						rendered="#{!registroPastoralEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.save']}" action="#{registroPastoralEditMB.update}"
+						rendered="#{registroPastoralEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.delete']}" onclick="confirmation.show()"
+						rendered="#{registroPastoralEditMB.updateMode}" type="button" immediate="true" ajax="false" />
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.delete']}" severity="alert" widgetVar="confirmation">
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{registroPastoralEditMB.delete}" immediate="true"
+							ajax="false" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br />
+
+			<p:fieldset legend="#{messages['registroPastoral.label']}" toggleable="true" toggleSpeed="500">
+				<h:panelGrid id="fieldsregistroPastoral" columns="3">
+				
+					<h:outputLabel value="#{messages['registroPastoral.label.idReg']}: " for="idReg" styleClass="text-input" />
+										
+					<h:outputText id="idReg" value="#{registroPastoralEditMB.bean.idReg}" />
+					
+					<p:message for="idReg" />
+						
+					<h:outputLabel value="#{messages['membro.label']}: " for="membro" styleClass="text-input" />
+				    <p:selectOneMenu id="membro" value="#{registroPastoralEditMB.bean.membro}"  effect="fade" converter="ConversorMembro">
+						<f:selectItem itemLabel="Selecione" itemValue="" />
+						<f:selectItems value="#{registroPastoralEditMB.membroList}" var="varMembro" itemLabel="#{varMembro.idMembro}"  itemValue="#{varMembro}" />						
+					</p:selectOneMenu>
+					<p:message for="membro" />								  
+								 
+					<h:outputLabel value="#{messages['pastor.label']}: " for="pastor" styleClass="text-input" />
+				    <p:selectOneMenu id="pastor" value="#{registroPastoralEditMB.bean.pastor}"  effect="fade" converter="ConversorPastor">
+						<f:selectItem itemLabel="Selecione" itemValue="" />
+						<f:selectItems value="#{registroPastoralEditMB.pastorList}" var="varPastor" itemLabel="#{varPastor.idPastor}"  itemValue="#{varPastor}" />						
+					</p:selectOneMenu>
+					<p:message for="pastor" />								  
+								 
+					<h:outputLabel value="#{messages['registroPastoral.label.dtRegistro']}: " for="dtRegistro" styleClass="text-input" />
+					
+					<p:calendar id="dtRegistro" value="#{registroPastoralEditMB.bean.dtRegistro}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['registroPastoral.alt.dtRegistro']}" />
+							 
+					<p:message for="dtRegistro" />
+						
+					<h:outputLabel value="#{messages['registroPastoral.label.assunto']}: " for="assunto" styleClass="text-input" />
+					
+					<h:inputText id="assunto" value="#{registroPastoralEditMB.bean.assunto}"
+						title="#{messages['registroPastoral.alt.assunto']}" />
+					
+					<p:message for="assunto" />
+						
+					<h:outputLabel value="#{messages['registroPastoral.label.registro']}: " for="registro" styleClass="text-input" />
+					
+					<h:inputText id="registro" value="#{registroPastoralEditMB.bean.registro}"
+						title="#{messages['registroPastoral.alt.registro']}" />
+					
+					<p:message for="registro" />
+						
+				</h:panelGrid>
+			</p:fieldset>
+			
+		</h:form>
+	</ui:define>
+</ui:composition>

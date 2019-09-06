@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	<h:form>
+		
+		<p:panelGrid columns="1" styleClass="semBorda" id="infologin" rendered="#{securityContext.loggedIn}">
+			<p:splitButton value="#{securityContext.user.nome}">
+		        <p:menuitem value="Perfil" url="verPerfil.jsf" icon="ui-icon-gear"/>
+		        <p:menuitem value="Sair" actionListener="#{securityContext.logout}" ajax="false" icon="ui-icon-close"/>
+		    </p:splitButton>
+			<h:outputText value="#{messages['congregacao.label']} #{securityContext.user.congregacao.nome}" rendered="#{securityContext.user.congregacao!=null}" />
+			
+		</p:panelGrid>
+		<p:panelGrid columns="3" styleClass="semBorda" rendered="#{!securityContext.loggedIn}">
+			<p:inputText id="username" value="#{loginMB.usuario}" title="#{messages['login.user']}" />
+			<p:password id="password" value="#{loginMB.senha}"/>
+			<p:commandButton value="Entrar" action="#{loginMB.doLogin}" />
+			
+			<p:message for="password" />
+			
+		</p:panelGrid>
+	
+		<p:watermark for="username" value="#{messages['login.user']}" />
+		<p:watermark for="password" value="#{messages['login.password']}" />
+	
+	</h:form>
+</ui:composition>

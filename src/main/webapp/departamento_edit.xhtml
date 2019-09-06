@@ -1,0 +1,56 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form prependId="false" rendered="#{securityContext.loggedIn}">
+
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{messages['button.save']}" action="#{departamentoEditMB.insert}"
+						rendered="#{!departamentoEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.save']}" action="#{departamentoEditMB.update}"
+						rendered="#{departamentoEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.delete']}" onclick="confirmation.show()"
+						rendered="#{departamentoEditMB.updateMode}" type="button" immediate="true" ajax="false" />
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.delete']}" severity="alert" widgetVar="confirmation">
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{departamentoEditMB.delete}" immediate="true"
+							ajax="false" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br />
+
+			<p:fieldset legend="#{messages['departamento.label']}" toggleable="true" toggleSpeed="500">
+				<h:panelGrid id="fields" columns="3">
+					
+					<h:outputLabel value="#{messages['departamento.label.idDep']}: " for="idDep" styleClass="text-input" />
+					<h:outputText id="idDep" value="#{departamentoEditMB.bean.idDep}" />
+					<p:message for="idDep" />
+					
+					<h:outputLabel value="#{messages['departamento.label.nome']}: " for="nome" styleClass="text-input" />
+					<p:inputText id="nome" value="#{departamentoEditMB.bean.nome}"
+						title="#{messages['departamento.alt.nome']}" />
+					<p:message for="nome" />
+					
+					<h:outputLabel value="#{messages['departamento.label.inicio']}: " for="inicio" styleClass="text-input" />
+					<p:calendar id="inicio" value="#{departamentoEditMB.bean.inicio}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['departamento.alt.inicio']}" />
+					   <p:message for="inicio" />
+								
+					<h:outputLabel value="#{messages['departamento.label.termino']}: " for="termino" styleClass="text-input" />
+					<p:calendar id="termino" value="#{departamentoEditMB.bean.termino}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['departamento.alt.termino']}" />
+					   <p:message for="termino" />
+								
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,62 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form prependId="false" rendered="#{securityContext.loggedIn}">
+
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{messages['button.save']}" action="#{ingressoEditMB.insert}"
+						rendered="#{!ingressoEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.save']}" action="#{ingressoEditMB.update}"
+						rendered="#{ingressoEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.delete']}" onclick="confirmation.show()"
+						rendered="#{ingressoEditMB.updateMode}" type="button" immediate="true" ajax="false" />
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.delete']}" severity="alert" widgetVar="confirmation">
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{ingressoEditMB.delete}" immediate="true"
+							ajax="false" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br />
+
+			<p:fieldset legend="#{messages['ingresso.label']}" toggleable="true" toggleSpeed="500">
+				<h:panelGrid id="fields" columns="3">
+					
+					<h:outputLabel value="#{messages['ingresso.label.idIngresso']}: " for="idIngresso" styleClass="text-input" />
+					<h:outputText id="idIngresso" value="#{ingressoEditMB.bean.idIngresso}" />
+					<p:message for="idIngresso" />
+					
+					<h:outputLabel value="#{messages['ingresso.label.forma']}: " for="forma" styleClass="text-input" />
+					<p:inputText id="forma" value="#{ingressoEditMB.bean.forma}"
+						title="#{messages['ingresso.alt.forma']}" />
+					<p:message for="forma" />
+					
+					<h:outputLabel value="#{messages['ingresso.label.cadastro']}: " for="cadastro" styleClass="text-input" />
+					<p:calendar id="cadastro" value="#{ingressoEditMB.bean.cadastro}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['ingresso.alt.cadastro']}" />
+					   <p:message for="cadastro" />
+								
+					<h:outputLabel value="#{messages['ingresso.label.alteracao']}: " for="alteracao" styleClass="text-input" />
+					<p:calendar id="alteracao" value="#{ingressoEditMB.bean.alteracao}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['ingresso.alt.alteracao']}" />
+					   <p:message for="alteracao" />
+								
+					<h:outputLabel value="#{messages['ingresso.label.exclusao']}: " for="exclusao" styleClass="text-input" />
+					<p:calendar id="exclusao" value="#{ingressoEditMB.bean.exclusao}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['ingresso.alt.exclusao']}" />
+					   <p:message for="exclusao" />
+								
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>

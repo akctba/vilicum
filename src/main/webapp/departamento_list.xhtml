@@ -1,0 +1,67 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form rendered="#{securityContext.loggedIn}">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton title="#{messages['button.new']}" icon="ui-icon-document" action="#{departamentoListMB.getNextView}"
+						rendered="#{securityContext.hasRole('Secretaria')}"
+						actionListener="#{departamentoListMB.clear}" ajax="false" />
+
+					<p:commandButton title="#{messages['button.delete']}" icon="ui-icon-trash" onclick="confirmation.show()"
+						rendered="#{securityContext.hasRole('Admin')}"
+						type="button" immediate="true" ajax="false" />
+
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.alert']}!" severity="alert" widgetVar="confirmation">
+
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{departamentoListMB.deleteSelection}"
+							actionListener="#{departamentoListMB.clear}" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<p:dataTable id="list" var="bean" value="#{departamentoListMB.resultList}">
+				<f:facet name="header">#{messages['departamento.list.table.title']}</f:facet>
+				<p:column style="width:1%;">
+					<h:selectBooleanCheckbox value="#{departamentoListMB.selection[bean.idDep]}"></h:selectBooleanCheckbox>
+				</p:column>
+				
+				<p:column style="width:5%;" sortBy="#{bean.idDep}">
+					<f:facet name="header">#{messages['departamento.label.idDep']}</f:facet>
+					<h:outputText value="#{bean.idDep}" />
+				</p:column>
+						
+				<p:column sortBy="#{bean.nome}">
+					<f:facet name="header">#{messages['departamento.label.nome']}</f:facet>
+					<h:commandLink action="#{departamentoListMB.getNextView}" 
+						actionListener="#{departamentoListMB.clear}" rendered="#{securityContext.hasRole('Secretaria')}">
+						<h:outputText value="#{bean.nome}" />
+						<f:param name="id" value="#{bean.idDep}" />
+					</h:commandLink>
+					<h:outputText value="#{bean.nome}" rendered="#{!securityContext.hasRole('Secretaria')}"/>
+					
+				</p:column>
+						
+				<p:column sortBy="#{bean.inicio}">
+					<f:facet name="header">#{messages['departamento.label.inicio']}</f:facet>
+					<h:outputText value="#{bean.inicio}">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+				</p:column>
+						
+				<p:column sortBy="#{bean.termino}">
+					<f:facet name="header">#{messages['departamento.label.termino']}</f:facet>
+					<h:outputText value="#{bean.termino}">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+				</p:column>
+						
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,82 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+	<h:form>
+		<p:menubar>
+			<p:submenu label="#{messages['menu.registroPastoral']}">
+				<p:menuitem value="#{messages['menu.menuitem.new']}" url="/registroPastoral_edit.jsf"></p:menuitem>
+				<p:menuitem value="#{messages['menu.menuitem.list']}" url="/registroPastoral_list.jsf"></p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="#{messages['menu.alerta']}">
+				<p:menuitem value="#{messages['menu.menuitem.new']}" url="/alerta_edit.jsf"></p:menuitem>
+				<p:menuitem value="#{messages['menu.menuitem.list']}" url="/alerta_list.jsf"></p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="#{messages['menu.culto']}">
+				<p:menuitem value="#{messages['menu.menuitem.new']}" url="/culto_edit-dialog.jsf"></p:menuitem>
+				<p:menuitem value="#{messages['menu.menuitem.list']}" url="/culto_lista.jsf"></p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="#{messages['menu.participacao']}">
+				<p:menuitem value="#{messages['menu.menuitem.new']}" url="/participacao_edit.jsf"></p:menuitem>
+				<p:menuitem value="#{messages['menu.menuitem.list']}" url="/participacao_list.jsf"></p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="#{messages['menu.membro']}">
+				<p:menuitem value="#{messages['menu.menuitem.new']}" url="/membro_edit.jsf"></p:menuitem>
+				<p:menuitem value="#{messages['menu.menuitem.list']}" url="/membro_list.jsf"></p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="#{messages['menu.familia']}">
+				<p:menuitem value="#{messages['menu.menuitem.new']}" url="/familia_edit.jsf"></p:menuitem>
+				<p:menuitem value="#{messages['menu.menuitem.list']}" url="/familia_list.jsf"></p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="#{messages['menu.departamento']}">
+				<p:menuitem value="#{messages['menu.menuitem.new']}" url="/departamento_edit.jsf"></p:menuitem>
+				<p:menuitem value="#{messages['menu.menuitem.list']}" url="/departamento_list.jsf"></p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="#{messages['menu.congregacaoPastor']}">
+				<p:menuitem value="#{messages['menu.menuitem.new']}" url="/congregacaoPastor_edit.jsf"></p:menuitem>
+				<p:menuitem value="#{messages['menu.menuitem.list']}" url="/congregacaoPastor_list.jsf"></p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="#{messages['menu.congregacao']}">
+				<p:menuitem value="#{messages['menu.menuitem.new']}" url="/congregacao_edit.jsf"></p:menuitem>
+				<p:menuitem value="#{messages['menu.menuitem.list']}" url="/congregacao_list.jsf"></p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="#{messages['menu.pastor']}">
+				<p:menuitem value="#{messages['menu.menuitem.new']}" url="/pastor_edit.jsf"></p:menuitem>
+				<p:menuitem value="#{messages['menu.menuitem.list']}" url="/pastor_list.jsf"></p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="#{messages['menu.ingresso']}">
+				<p:menuitem value="#{messages['menu.menuitem.new']}" url="/ingresso_edit.jsf"></p:menuitem>
+				<p:menuitem value="#{messages['menu.menuitem.list']}" url="/ingresso_list.jsf"></p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="#{messages['menu.usuario']}">
+				<p:menuitem value="#{messages['menu.menuitem.new']}" url="/usuario_edit.jsf"></p:menuitem>
+				<p:menuitem value="#{messages['menu.menuitem.list']}" url="/usuario_list.jsf"></p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="#{messages['menu.perfil']}">
+				<p:menuitem value="#{messages['menu.menuitem.new']}" url="/perfil_edit.jsf"></p:menuitem>
+				<p:menuitem value="#{messages['menu.menuitem.list']}" url="/perfil_list.jsf"></p:menuitem>
+			</p:submenu>
+
+			<p:submenu label="#{messages['menu.bookmark']}">
+				<p:menuitem value="#{messages['menu.menuitem.new']}" url="/bookmark_edit.jsf" />
+				<p:menuitem value="#{messages['menu.menuitem.list']}" url="/bookmark_list.jsf" />
+			</p:submenu>
+
+			<p:menuitem value="#{messages['menu.menuitem.quit']}" url="http://www.frameworkdemoiselle.gov.br/"
+				action="#{securityContext.logout}" />
+		</p:menubar>
+	</h:form>
+
+</ui:composition>

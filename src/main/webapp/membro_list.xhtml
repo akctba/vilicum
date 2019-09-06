@@ -1,0 +1,273 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form rendered="#{securityContext.loggedIn}">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton title="#{messages['button.new']}" icon="ui-icon-document" action="#{membroListMB.getNextView}"
+						actionListener="#{membroListMB.clear}" ajax="false" rendered="#{securityContext.hasRole('Secretaria')}" />
+
+					<p:commandButton title="#{messages['button.delete']}" icon="ui-icon-trash" onclick="confirmation.show()"
+						type="button" immediate="true" ajax="false" rendered="#{securityContext.hasRole('Secretaria')}" />
+						
+					<p:commandButton title="Exportar para Excel" icon="ui-icon-calculator" immediate="true" ajax="false" >
+						<p:dataExporter type="xls" target="list" fileName="Membros" />
+					</p:commandButton>
+						
+					<p:commandButton title="Exportar para PDF" icon="ui-icon-newwin" immediate="true" ajax="false" >
+						<p:dataExporter type="pdf" target="list" fileName="Membros" />
+					</p:commandButton>
+					
+					<p:commandButton title="Imprimir" icon="ui-icon-print" immediate="true" ajax="false"
+						onclick="$('#conteudo').printElement();" />
+						
+					<p:commandButton title="#{messages['button.new']}" icon="ui-icon-print" action="#{relFamiliasMB.showReport}"
+						value="Imprimir Relatório" ajax="false" />
+					
+					<p:selectBooleanButton value="#{membroListMB.mostrarTodos}" onLabel="Ativos e Inativos" offLabel="Somente Ativos" onchange="" />
+					
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.alert']}!" severity="alert" widgetVar="confirmation">
+
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{membroListMB.deleteSelection}"
+							actionListener="#{membroListMB.clear}" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<div id="conteudo">
+			<p:dataTable id="list" var="memb" value="#{membroListMB.resultList}" stickyHeader="true"
+				 paginator="true" rows="15"
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
+				<f:facet name="header"><h:outputText value="#{messages['membro.list.table.title']}"/></f:facet>
+				<p:column style="width:2%;">
+					<h:commandLink action="./membro_ficha.jsf" actionListener="#{membroListMB.clear}" title="#{memb.idMembro}">
+						<img src="images/ico-ficha.png" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+					
+					
+				</p:column>
+				
+				<!-- <p:column style="width:5%;" sortBy="#{memb.idMembro}">
+					<f:facet name="header">#{messages['membro.label.idMembro']}</f:facet>
+					<h:outputText value="#{memb.idMembro}" />
+				</p:column> -->
+				
+				<p:column sortBy="#{memb.familia.nome}"
+					filterBy="#{memb.familia.nome}" filterMatchMode="contains">
+					<f:facet name="header"><h:outputText value="#{messages['membro.label.familia']}"/></f:facet>
+					<h:commandLink action="./familia_edit.jsf" actionListener="#{membroListMB.clear}" rendered="#{securityContext.hasRole('Secretaria')}">
+						<h:outputText value="#{memb.familia.nome}" />
+						<f:param name="id" value="#{memb.familia.idFam}" />
+					</h:commandLink>
+					<h:outputText value="#{memb.familia.nome}" rendered="#{!securityContext.hasRole('Secretaria')}" />
+				</p:column>
+						
+				<p:column sortBy="#{memb.nome}"
+					filterBy="#{memb.nome}" filterMatchMode="contains">
+					<f:facet name="header"><h:outputText value="#{messages['membro.label.nome']}"/></f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}" rendered="#{securityContext.hasRole('Secretaria')}">
+						<h:outputText value="#{memb.nome}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+					<h:commandLink action="./membro_ficha.jsf" actionListener="#{membroListMB.clear}" rendered="#{!securityContext.hasRole('Secretaria')}">
+						<h:outputText value="#{memb.nome}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+					
+				</p:column>
+				
+				<!-- <p:column sortBy="#{memb.formaIngresso}">
+					<f:facet name="header"><h:outputText value="#{messages['membro.label.formaIngresso']}"/></f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.formaIngresso.forma}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+				
+				<!-- <p:column sortBy="#{memb.nascimento}">
+					<f:facet name="header">#{messages['membro.label.nascimento']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.nascimento}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+				
+				<!-- <p:column sortBy="#{memb.sexo}">
+					<f:facet name="header">#{messages['membro.label.sexo']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.sexo}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+				
+				<!-- <p:column sortBy="#{memb.localNascimento}">
+					<f:facet name="header">#{messages['membro.label.localNascimento']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.localNascimento}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+				
+				<!-- <p:column sortBy="#{memb.dataBatismo}">
+					<f:facet name="header">#{messages['membro.label.dataBatismo']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.dataBatismo}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+				
+				<!-- <p:column sortBy="#{memb.localBatismo}">
+					<f:facet name="header">#{messages['membro.label.localBatismo']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.localBatismo}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+				
+				<!-- <p:column sortBy="#{memb.dataCasamento}">
+					<f:facet name="header">#{messages['membro.label.dataCasamento']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.dataCasamento}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+				
+				<!-- <p:column sortBy="#{memb.localCasamento}">
+					<f:facet name="header">#{messages['membro.label.localCasamento']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.localCasamento}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+				
+				<!-- <p:column sortBy="#{memb.estadoCivil}">
+					<f:facet name="header">#{messages['membro.label.estadoCivil']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.estadoCivil}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+						
+				<!-- <p:column sortBy="#{memb.profissao}">
+					<f:facet name="header">#{messages['membro.label.profissao']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.profissao}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+						
+				<!-- <p:column sortBy="#{memb.ativo}">
+					<f:facet name="header">#{messages['membro.label.ativo']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.ativo}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+				
+				<p:column>
+					<f:facet name="header"><h:outputText value="#{messages['familia.label.foneFixo']}"/></f:facet>
+					<h:outputText value="#{memb.familia.foneFixo}" />
+				</p:column>
+						
+				<p:column>
+					<f:facet name="header"><h:outputText value="#{messages['membro.label.celular']}"/></f:facet>
+					<h:outputText value="#{memb.celular}" />
+				</p:column>
+						
+				<p:column>
+					<f:facet name="header"><h:outputText value="#{messages['membro.label.email']}"/></f:facet>
+					<h:outputText value="#{memb.email}" />
+				</p:column>
+						
+				<!-- <p:column sortBy="#{memb.observacoes}">
+					<f:facet name="header">#{messages['membro.label.observacoes']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.observacoes}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+						
+				<!-- <p:column sortBy="#{memb.motivoInativo}">
+					<f:facet name="header">#{messages['membro.label.motivoInativo']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.motivoInativo}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+						
+				<!-- <p:column sortBy="#{memb.excluir}">
+					<f:facet name="header">#{messages['membro.label.excluir']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.excluir}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+						
+				<!-- <p:column sortBy="#{memb.recadastro}">
+					<f:facet name="header">#{messages['membro.label.recadastro']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.recadastro}" />
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+						
+				<!-- <p:column sortBy="#{memb.dataEntrada}">
+					<f:facet name="header">#{messages['membro.label.dataEntrada']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.dataEntrada}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+						</h:outputText>
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+						
+				<!-- <p:column sortBy="#{memb.dataSaida}">
+					<f:facet name="header">#{messages['membro.label.dataSaida']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.dataSaida}" >
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+						</h:outputText>
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+						
+				<!-- <p:column sortBy="#{memb.cadastro}">
+					<f:facet name="header">#{messages['membro.label.cadastro']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.cadastro}" >
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+						</h:outputText>
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+						
+				<!-- <p:column sortBy="#{memb.alteracao}">
+					<f:facet name="header">#{messages['membro.label.alteracao']}</f:facet>
+					<h:commandLink action="#{membroListMB.getNextView}" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{memb.alteracao}" >
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+						</h:outputText>
+						<f:param name="id" value="#{memb.idMembro}" />
+					</h:commandLink>
+				</p:column> -->
+				
+				<p:column sortBy="#{memb.comungante}">
+					<f:facet name="header"><h:outputText value="#{messages['membro.label.comungante']}"/></f:facet>
+					<h:outputText rendered="#{memb.comungante}" value="#{messages['sim']}" />
+					<h:outputText rendered="#{!memb.comungante}" value="#{messages['nao']}" />
+				</p:column>
+						
+			</p:dataTable>
+			</div>
+		
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

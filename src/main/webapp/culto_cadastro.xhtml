@@ -1,0 +1,149 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<p:log rendered="false"/>
+		<ui:debug hotkey="X" />
+		
+		<h:form prependId="false" rendered="#{securityContext.loggedIn}">
+			
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{messages['button.save']}" action="#{cultoEditMB.insert}"
+						rendered="#{!cultoEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.save']}" action="#{cultoEditMB.update}"
+						rendered="#{cultoEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.delete']}" onclick="confirmation.show()"
+						rendered="#{cultoEditMB.updateMode}" type="button" immediate="true" ajax="false" />
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.delete']}" severity="alert" widgetVar="confirmation">
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{cultoEditMB.delete}" immediate="true"
+							ajax="false" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+					
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br />
+
+			<p:fieldset legend="#{messages['culto.label']}" toggleable="true" toggleSpeed="500">
+				<h:panelGrid id="fields" columns="6" width="90%">
+					
+					
+					<h:outputLabel value="#{messages['culto.label.data']}: " for="data" styleClass="text-input" />
+					<p:calendar id="data" value="#{cultoEditMB.bean.data}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['culto.alt.data']}" />
+					   <p:message for="data" />
+					<!-- 
+					<h:outputLabel value="#{messages['culto.label.idCulto']}: " for="idCulto" styleClass="text-input" />
+					<h:outputText id="idCulto" value="#{cultoEditMB.bean.idCulto}" />
+					<p:message for="idCulto" />  -->
+					<p:spacer/>
+					<p:spacer/>
+					<p:spacer/>
+								
+					<h:outputLabel value="#{messages['culto.label.pastor']}: " for="pastor" styleClass="text-input" />
+					<p:selectOneMenu id="pastor" value="#{cultoEditMB.bean.pastor}" effect="fade"
+									converter="simpleEntityConverter"
+									required="true"
+									requiredMessage="é necessário selecionar o pastor."
+									filter="true" filterMatchMode="contains">  
+			            <f:selectItem itemLabel="Selecione o pastor" itemValue="" />  
+			            <f:selectItems value="#{cultoEditMB.pastores}" var="p" itemLabel="#{p.nome}" itemValue="#{p}"/>  
+			        </p:selectOneMenu>
+					<p:message for="pastor" />
+					
+					<h:outputLabel value="Culto com #{messages['culto.label.diacono']}: " for="diacono" styleClass="text-input" />
+					<p:column>
+						<p:selectBooleanButton id="diacono" value="#{cultoEditMB.bean.diacono}"  title="#{messages['culto.alt.diacono']}"
+							onIcon="ui-icon-check" offIcon="ui-icon-close"
+							onLabel="#{messages['sim']}" offLabel="#{messages['nao']}" />  
+						
+						<div id="nd" >
+							<h:outputLabel value="#{messages['culto.label.nomeDiacono']}: " for="nomeDiacono" styleClass="text-input" />
+							<p:inputText id="nomeDiacono" value="#{cultoEditMB.bean.nomeDiacono}"
+								title="#{messages['culto.alt.nomeDiacono']}" />
+							<p:message for="nomeDiacono" />
+						</div>
+					</p:column>
+					<p:message for="diacono" />
+					
+					<h:outputLabel value="#{messages['culto.label.adultos']}: " for="adultos" styleClass="text-input" />
+					<p:spinner id="adultos" value="#{cultoEditMB.bean.adultos}"
+						title="#{messages['culto.alt.adultos']}" />
+					<p:message for="adultos" />
+					
+					<h:outputLabel value="#{messages['culto.label.criancas']}: " for="criancas" styleClass="text-input" />
+					<p:spinner id="criancas" value="#{cultoEditMB.bean.criancas}"
+						title="#{messages['culto.alt.criancas']}" />
+					<p:message for="criancas" />
+					
+					<h:outputLabel value="#{messages['culto.label.visitantes']}: " for="visitantes" styleClass="text-input" />
+					<p:spinner id="visitantes" value="#{cultoEditMB.bean.visitantes}"
+						title="#{messages['culto.alt.visitantes']}" />
+					<p:message for="visitantes" />
+					
+					<h:outputLabel value="#{messages['culto.label.participantes']}: " for="participantes" styleClass="text-input" />
+					<p:spinner id="participantes" value="#{cultoEditMB.bean.participantes}"
+						title="#{messages['culto.alt.participantes']}" />
+					<p:message for="participantes" />
+					
+				</h:panelGrid>
+				<h:panelGrid id="fieldtema" columns="3" width="90%">
+					<h:outputLabel value="#{messages['culto.label.programa']}: " for="programa" styleClass="text-input" />
+					<p:inputText id="programa" value="#{cultoEditMB.bean.programa}"
+						size="100" maxlength="200"
+						title="#{messages['culto.alt.programa']}" />
+					<p:message for="programa" />
+				</h:panelGrid>
+				<br />
+				<h:outputText id="qtdassinado" value="#{cultoEditMB.bean.qtdStaCeia} Assinaturas no caderno da Santa Ceia" />
+			</p:fieldset>
+			
+			<br />
+
+			<p:fieldset legend="#{messages['culto.label.registroparticipacoes']}" 
+			toggleable="true" collapsed="true" toggleSpeed="500" rendered="#{cultoEditMB.updateMode}">
+				
+				<p:pickList id="selpart" value="#{cultoEditMB.listadupla}" var="membroSta"  
+					converter="simpleEntityConverter" itemLabel="#{membroSta.nomeSemAcento}" 
+					itemValue="#{membroSta}" showCheckbox="true" showSourceFilter="true" 
+					showTargetFilter="true" filterMatchMode="contains" >
+					<p:column style="width:90%;">#{membroSta.nomeSemAcento}</p:column>
+					<f:facet name="sourceCaption">Rol de Membros</f:facet>
+					<f:facet name="targetCaption">Participantes neste culto</f:facet>
+					
+					<p:ajax event="transfer" listener="#{cultoEditMB.onPickMember}" update="qtdassinado"/>
+				</p:pickList>
+				
+			</p:fieldset>
+			
+			
+		</h:form>
+		
+		<script type="text/javascript">
+		$(document).ready(function(){
+
+			$('#nd').hide();
+			
+			$('#diacono').click(function(event){
+				if($('#diacono_input').val()) {
+					event.preventDefault();
+					$("#nd").show("slow");
+				} else {
+					event.preventDefault();
+					$('nomeDiacono').val("");
+					$("#nd").hide("slow");
+				}
+				
+			});
+
+		});
+		
+		</script>
+	</ui:define>
+</ui:composition>

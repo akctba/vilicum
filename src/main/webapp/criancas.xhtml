@@ -1,0 +1,62 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form rendered="#{securityContext.loggedIn}">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton value="Planilha" title="Exportar para Excel" icon="ui-icon-calculator" immediate="true" ajax="false" >
+						<p:dataExporter type="xls" target="list" fileName="Criancas" />
+					</p:commandButton>
+					
+					<p:commandButton value="PDF" title="Exportar para PDF" icon="ui-icon-newwin" immediate="true" ajax="false" >
+						<p:dataExporter type="pdf" target="list" fileName="Criancas" />
+					</p:commandButton>
+					
+					<p:commandButton title="Imprimir" icon="ui-icon-print" immediate="true" ajax="false"
+						onclick="$('#conteudo').printElement();" />
+				</p:toolbarGroup>
+			</p:toolbar>
+			
+			<div id="conteudo">
+				<p:dataTable id="list" var="memb" value="#{criancasMB.criancasList}" stickyHeader="true"
+				 paginator="true" rows="50" emptyMessage="#{messages['membro.list.criancas.empty']}"
+				 sortBy="#{memb.idade}"
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
+				<f:facet name="header"><h:outputText value="#{messages['membro.list.table.criancas']} - Total #{criancasMB.criancasList.size()}"/></f:facet>
+				
+					<p:column sortBy="#{memb.idMembro}" width="10%"
+						filterBy="#{memb.idMembro}" filterMatchMode="contains">
+						<f:facet name="header"><h:outputText value="#{messages['membro.label.idMembro']}"/></f:facet>
+						<h:outputText value="#{memb.idMembro}"  style="float:right"/>
+					</p:column>
+					
+					<p:column sortBy="#{memb.nome}" width="60%"
+						filterBy="#{memb.nome}" filterMatchMode="contains">
+						<f:facet name="header"><h:outputText value="#{messages['membro.label.nome']}"/></f:facet>
+						<h:outputText value="#{memb.nome}" />
+					</p:column>
+					
+					<p:column sortBy="#{memb.nascimento}">
+						<f:facet name="header"><h:outputText value="#{messages['membro.label.nascimento']}"/></f:facet>
+						<h:outputText value="#{memb.nascimento}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column sortBy="#{memb.idade}">
+						<f:facet name="header"><h:outputText value="#{messages['membro.label.idade']}"/></f:facet>
+						<h:outputText value="#{memb.idade}" />
+					</p:column>
+					
+			
+				<f:facet name="footer"><h:outputText value="#{messages['membro.list.criancas.observacao']}"/></f:facet>
+				</p:dataTable>
+				
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

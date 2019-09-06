@@ -1,0 +1,55 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form rendered="#{securityContext.loggedIn}" >
+			<p:fieldset legend="Ajuda" toggleable="true"> 
+				<p><h:outputText value="#{messages['analise.membros.texto']}" /></p>
+				<p>É possivel ordenar por nome do membro ou pelo tipo de pendência, basta clicar no nome da coluna.</p>
+				<p>Também é possivel filtrar pelo nome do membro, digitando parte do nome na caixa de filtro, que está no título da coluna Membros.</p>
+				<p>Se preferir, também é possivel exportar para uma planilha, e trabalhar os dados no Excel.</p>
+			</p:fieldset>
+		<br/>
+			<p:fieldset legend="Análise cadastro de membros" toggleable="false"> 
+					<p:commandButton title="Exportar para Excel" value="Exportar para Excel" icon="ui-icon-calculator" immediate="true" ajax="false" >
+						<p:dataExporter type="xls" target="listMem" fileName="Membros_pendencias_cadastro" />
+					</p:commandButton>
+					<p:dataTable var="ent" value="#{cadastroView.analiseMembros}" id="listMem"
+						emptyMessage="#{messages['analise.pendencias.zero']}" sortBy="#{ent.membro}"
+						rows="20" paginator="true"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="10,20,30,50">
+                         
+                        <p:column style="width:2%;">
+							<p:commandLink styleClass="ui-icon ui-icon-wrench" action="./membro_edit.jsf"  title="#{ent.idMem}">
+								<f:param name="id" value="#{ent.idMem}" />
+							</p:commandLink> 
+						</p:column>
+                        
+						<p:column headerText="#{messages['menu.membro']}" sortBy="#{ent.membro}" filterBy="#{ent.membro}">
+							<h:outputText value="#{ent.membro}" />
+						</p:column>
+						<p:column headerText="#{messages['analise.pendencia']}" sortBy="#{ent.motivo}">
+							<h:outputText value="#{messages[ent.motivo]}" />
+						</p:column>
+						
+						
+						
+					</p:dataTable>
+				
+			</p:fieldset>
+			<br/>
+			<p:fieldset legend="Análise cadastro de familias" toggleable="false">
+					
+				
+			</p:fieldset>
+			<br/>
+			<p:fieldset legend="Cultos" toggleable="false">
+				
+			</p:fieldset>
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,72 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form>
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton title="#{messages['button.new']}" icon="ui-icon-document" action="#{alertaListMB.getNextView}"
+						actionListener="#{alertaListMB.clear}" ajax="false" />
+
+					<p:commandButton title="#{messages['button.delete']}" icon="ui-icon-trash" onclick="confirmation.show()"
+						type="button" immediate="true" ajax="false" />
+
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.alert']}!" severity="alert" widgetVar="confirmation">
+
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{alertaListMB.deleteSelection}"
+							actionListener="#{alertaListMB.clear}" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<p:dataTable id="list" var="bean" value="#{alertaListMB.resultList}">
+				<f:facet name="header">#{messages['alerta.list.table.title']}</f:facet>
+				<p:column style="width:2%;">
+					<h:selectBooleanCheckbox value="#{alertaListMB.selection[bean.idAlerta]}"></h:selectBooleanCheckbox>
+				</p:column>
+				
+				<p:column style="width:5%;" sortBy="#{bean.idAlerta}">
+					<f:facet name="header">#{messages['alerta.label.idAlerta']}</f:facet>
+					<h:outputText value="#{bean.idAlerta}" />
+				</p:column>
+						
+				<p:column sortBy="#{bean.texto}">
+					<f:facet name="header">#{messages['alerta.label.texto']}</f:facet>
+					<h:commandLink action="#{alertaListMB.getNextView}" actionListener="#{alertaListMB.clear}">
+						<h:outputText value="#{bean.texto}" />
+						<f:param name="id" value="#{bean.idAlerta}" />
+					</h:commandLink>
+				</p:column>
+					
+				<p:column sortBy="#{bean.cadastro}">
+					<f:facet name="header">#{messages['alerta.label.cadastro']}</f:facet>
+					<h:commandLink action="#{alertaListMB.getNextView}" actionListener="#{alertaListMB.clear}">
+						<h:outputText value="#{bean.cadastro}" />
+						<f:param name="id" value="#{bean.idAlerta}" />
+					</h:commandLink>
+				</p:column>
+					
+				<p:column sortBy="#{bean.validade}">
+					<f:facet name="header">#{messages['alerta.label.validade']}</f:facet>
+					<h:commandLink action="#{alertaListMB.getNextView}" actionListener="#{alertaListMB.clear}">
+						<h:outputText value="#{bean.validade}" />
+						<f:param name="id" value="#{bean.idAlerta}" />
+					</h:commandLink>
+				</p:column>
+					
+				<p:column sortBy="#{bean.execucao}">
+					<f:facet name="header">#{messages['alerta.label.execucao']}</f:facet>
+					<h:commandLink action="#{alertaListMB.getNextView}" actionListener="#{alertaListMB.clear}">
+						<h:outputText value="#{bean.execucao}" />
+						<f:param name="id" value="#{bean.idAlerta}" />
+					</h:commandLink>
+				</p:column>
+					
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

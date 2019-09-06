@@ -1,0 +1,168 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+	
+	<ui:define name="body">
+	<f:view contentType="text/html" locale="#{locales.currentLocale}" />
+	
+		<h:form prependId="false" rendered="#{securityContext.loggedIn}">
+
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{messages['button.save']}" action="#{familiaEditMB.insert}"
+						rendered="#{!familiaEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.save']}" action="#{familiaEditMB.update}"
+						rendered="#{familiaEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.delete']}" onclick="confirmation.show()"
+						rendered="#{familiaEditMB.updateMode}" type="button" immediate="true" ajax="false" />
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.delete']}" severity="alert" widgetVar="confirmation">
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{familiaEditMB.delete}" immediate="true"
+							ajax="false" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br />
+
+			<p:fieldset legend="#{messages['familia.label']} - #{familiaEditMB.bean.idFam}" toggleable="true" toggleSpeed="500">
+				<h:panelGrid id="fields" columns="6" width="100%">
+					<!-- 
+					<h:outputLabel value="#{messages['familia.label.idFam']}: " for="idFam" styleClass="text-input" />
+					<h:outputText id="idFam" value="#{familiaEditMB.bean.idFam}" />
+					<p:message for="idFam" />
+					 -->
+					
+					<h:outputLabel value="#{messages['familia.label.nome']}: " for="nome" styleClass="text-input" />
+					<p:inputText id="nome" value="#{familiaEditMB.bean.nome}"
+						title="#{messages['familia.alt.nome']}" />
+					<p:message for="nome" />
+					
+					<h:outputLabel value="#{messages['familia.label.foneFixo']}: " for="foneFixo" styleClass="text-input" />
+					<p:inputMask id="foneFixo" value="#{familiaEditMB.bean.foneFixo}"
+						mask="(99) 9999-9999"
+						title="#{messages['familia.alt.foneFixo']}" />
+					<p:message for="foneFixo" />
+					
+					<h:outputLabel value="#{messages['familia.label.cep']}: " for="cep" styleClass="text-input" />
+					<p:inputMask id="cep" value="#{familiaEditMB.bean.cep}"
+						mask="99999-999" title="#{messages['familia.alt.cep']}" >
+						
+						<f:ajax event="blur" listener="#{familiaEditMB.buscaCep}" render="rua bairro cidade estado" />
+						
+					</p:inputMask>
+					<p:message for="cep" />
+					
+					<h:outputLabel value="#{messages['familia.label.rua']}: " for="rua" styleClass="text-input" />
+					<p:inputText id="rua" value="#{familiaEditMB.bean.rua}"
+						title="#{messages['familia.alt.rua']}" />
+					<p:message for="rua" />
+					
+					<h:outputLabel value="#{messages['familia.label.nro']}: " for="nro" styleClass="text-input" />
+					<p:inputText id="nro" value="#{familiaEditMB.bean.nro}"
+						title="#{messages['familia.alt.nro']}" />
+					<p:message for="nro" />
+					
+					<h:outputLabel value="#{messages['familia.label.complemento']}: " for="complemento" styleClass="text-input" />
+					<p:inputText id="complemento" value="#{familiaEditMB.bean.complemento}"
+						title="#{messages['familia.alt.complemento']}" />
+					<p:message for="complemento" />
+					
+					<h:outputLabel value="#{messages['familia.label.bairro']}: " for="bairro" styleClass="text-input" />
+					<p:inputText id="bairro" value="#{familiaEditMB.bean.bairro}"
+						title="#{messages['familia.alt.bairro']}" />
+					<p:message for="bairro" />
+					
+					
+					<h:outputLabel value="#{messages['familia.label.cidade']}: " for="cidade" styleClass="text-input" />
+					<p:inputText id="cidade" value="#{familiaEditMB.bean.cidade}"
+						title="#{messages['familia.alt.cidade']}" />
+					<p:message for="cidade" />
+					
+					<h:outputLabel value="#{messages['familia.label.estado']}: " for="estado" styleClass="text-input" />
+					<p:selectOneMenu id="estado" value="#{familiaEditMB.bean.estado}" >
+                		<f:selectItem itemLabel="Selecione o estado" />
+                		<f:selectItems var="state" value="#{familiaEditMB.estados}"
+                    	itemValue="#{state}" itemLabel="#{state.estado}" />
+            		</p:selectOneMenu>
+					<p:message for="estado" />
+					
+					<h:outputLabel value="#{messages['familia.label.cadastro']}: " for="cadastro" styleClass="text-input" />
+					<p:calendar id="cadastro" value="#{familiaEditMB.bean.cadastro}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['familia.alt.cadastro']}" />
+					   <p:message for="cadastro" />
+								
+					<h:outputLabel value="#{messages['familia.label.alteracao']}: " for="alteracao" styleClass="text-input" />
+					<p:calendar id="alteracao" value="#{familiaEditMB.bean.alteracao}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['familia.alt.alteracao']}" />
+					   <p:message for="alteracao" />
+								
+					<h:outputLabel value="#{messages['familia.label.exclusao']}: " for="exclusao" styleClass="text-input" />
+					<p:calendar id="exclusao" value="#{familiaEditMB.bean.exclusao}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['familia.alt.exclusao']}" />
+					   <p:message for="exclusao" />
+					
+				</h:panelGrid>
+			</p:fieldset>
+			
+			<br/>
+			<p:fieldset legend="Membros" toggleable="true" toggleSpeed="500" rendered="#{familiaEditMB.updateMode}">
+				<p:dataTable id="list" var="bean" value="#{familiaEditMB.bean.naoExcluidos}"
+				rendered="#{not empty familiaEditMB.bean.membros}">
+				
+				<p:column rendered="#{securityContext.hasRole('Administrador')}">
+					<f:facet name="header">id</f:facet>
+					<h:outputText value="#{bean.idMembro}" />
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header">#{messages['membro.label.nome']}</f:facet>
+					<h:commandLink action="/membro_ficha.jsf" actionListener="#{membroListMB.clear}">
+						<h:outputText value="#{bean.nome}" />
+						<f:param name="id" value="#{bean.idMembro}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column>
+					<f:facet name="header">#{messages['membro.label.nascimento']}</f:facet>
+					<h:outputText value="#{bean.nascimento}">
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header">#{messages['membro.label.ativo']}</f:facet>
+					<h:outputText rendered="#{bean.ativo}" value="#{messages['sim']}" />
+					<h:outputText rendered="#{!bean.ativo}" value="#{messages['nao']}" />
+				</p:column>
+						
+				<p:column>
+					<f:facet name="header">#{messages['membro.label.comungante']}</f:facet>
+					<h:outputText rendered="#{bean.comungante}" value="#{messages['sim']}" />
+					<h:outputText rendered="#{!bean.comungante}" value="#{messages['nao']}" />
+				</p:column>
+						
+				<p:column>
+					<f:facet name="header">#{messages['membro.label.celular']}</f:facet>
+					<h:outputText value="#{bean.celular}" />
+				</p:column>
+						
+				<p:column>
+					<f:facet name="header">#{messages['membro.label.email']}</f:facet>
+					<h:outputText value="#{bean.email}" />
+				</p:column>
+						
+			</p:dataTable>
+			
+			<!-- Incluir um botão para adicionar membro à familia, preferencialmente com dialog -->
+			
+			</p:fieldset>
+			
+		</h:form>
+	</ui:define>
+</ui:composition>

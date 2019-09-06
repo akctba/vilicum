@@ -1,0 +1,112 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form rendered="#{securityContext.loggedIn}">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton title="#{messages['button.new']}" icon="ui-icon-document" action="#{usuarioListMB.getNextView}"
+						actionListener="#{usuarioListMB.clear}" ajax="false" />
+
+					<p:commandButton title="#{messages['button.delete']}" icon="ui-icon-trash" onclick="confirmation.show()"
+						type="button" immediate="true" ajax="false" />
+						
+					<p:commandButton title="Exportar para Excel" icon="ui-icon-calculator" immediate="true" ajax="false" >
+						<p:dataExporter type="xls" target="list" fileName="Usuarios" />
+					</p:commandButton>
+						
+					<p:commandButton title="Exportar para PDF" icon="ui-icon-newwin" immediate="true" ajax="false" >
+						<p:dataExporter type="pdf" target="list" fileName="Usuarios" />
+					</p:commandButton>
+
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.alert']}!" severity="alert" widgetVar="confirmation">
+
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{usuarioListMB.deleteSelection}"
+							actionListener="#{usuarioListMB.clear}" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<p:dataTable id="list" var="bean" value="#{usuarioListMB.resultList}">
+				<f:facet name="header">#{messages['usuario.list.table.title']}</f:facet>
+				<p:column style="width:1%;">
+					<h:selectBooleanCheckbox value="#{usuarioListMB.selection[bean.id]}"></h:selectBooleanCheckbox>
+				</p:column>
+				
+				<p:column style="width:5%;" sortBy="#{bean.id}">
+					<f:facet name="header">#{messages['usuario.label.id']}</f:facet>
+					<h:outputText value="#{bean.id}" />
+				</p:column>
+				
+				<p:column sortBy="#{bean.nome}">
+					<f:facet name="header">#{messages['usuario.label.nome']}</f:facet>
+					<h:commandLink action="#{usuarioListMB.getNextView}" actionListener="#{usuarioListMB.clear}">
+						<h:outputText value="#{bean.nome}" />
+						<f:param name="id" value="#{bean.id}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.email}">
+					<f:facet name="header">#{messages['usuario.label.email']}</f:facet>
+					<h:commandLink action="#{usuarioListMB.getNextView}" actionListener="#{usuarioListMB.clear}">
+						<h:outputText value="#{bean.email}" />
+						<f:param name="id" value="#{bean.id}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.congregacao}">
+					<f:facet name="header">#{messages['usuario.label.congregacao']}</f:facet>
+					<h:commandLink action="#{usuarioListMB.getNextView}" actionListener="#{usuarioListMB.clear}">
+						<h:outputText value="#{bean.congregacao.nome}" />
+						<f:param name="id" value="#{bean.id}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.ultimoAcesso}">
+					<f:facet name="header">#{messages['usuario.label.ultimoAcesso']}</f:facet>
+					<h:commandLink action="#{usuarioListMB.getNextView}" actionListener="#{usuarioListMB.clear}">
+						<h:outputText value="#{bean.ultimoAcesso}" >
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+						</h:outputText>
+						<f:param name="id" value="#{bean.id}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.inclusao}">
+					<f:facet name="header">#{messages['usuario.label.inclusao']}</f:facet>
+					<h:commandLink action="#{usuarioListMB.getNextView}" actionListener="#{usuarioListMB.clear}">
+						<h:outputText value="#{bean.inclusao}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						<f:param name="id" value="#{bean.id}" />
+					</h:commandLink>
+				</p:column>
+				
+				<p:column sortBy="#{bean.alteracao}">
+					<f:facet name="header">#{messages['usuario.label.alteracao']}</f:facet>
+					<h:commandLink action="#{usuarioListMB.getNextView}" actionListener="#{usuarioListMB.clear}">
+						<h:outputText value="#{bean.alteracao}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						<f:param name="id" value="#{bean.id}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.exclusao}">
+					<f:facet name="header">#{messages['usuario.label.exclusao']}</f:facet>
+					<h:commandLink action="#{usuarioListMB.getNextView}" actionListener="#{usuarioListMB.clear}">
+						<h:outputText value="#{bean.exclusao}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						<f:param name="id" value="#{bean.id}" />
+					</h:commandLink>
+				</p:column>
+						
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

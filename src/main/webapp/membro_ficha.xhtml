@@ -1,0 +1,296 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	
+		<h:form rendered="#{securityContext.loggedIn}" prependId="false" enctype="multipart/form-data">
+			<h:panelGrid id="geral" columns="2">
+				<h:panelGrid columns="1">
+				<p:fieldset legend="#{messages['membro.label']} - #{membroEditMB.bean.idMembro}" toggleable="false">
+					<h:panelGrid id="fields" columns="2" width="380px;">
+						
+						<h:outputLabel value="#{messages['membro.label.nome']}: " for="nome" styleClass="text-input" />
+						<h:outputText id="nome" value="#{membroEditMB.bean.nome}" />
+						
+						<h:outputLabel value="#{messages['membro.label.familia']}: " for="familia" styleClass="text-input" />
+						<h:outputText id="familia" value="#{membroEditMB.bean.familia.nome}" />
+						
+						<h:outputLabel value="#{messages['membro.label.formaIngresso']}: " for="formaIngresso" styleClass="text-input" />
+						<h:outputText id="formaIngresso" value="#{membroEditMB.bean.formaIngresso.forma}" />
+						
+						<h:outputLabel value="#{messages['membro.label.nascimento']}: " for="nascimento" styleClass="text-input" />
+						<h:outputText id="nascimento" value="#{membroEditMB.bean.nascimento}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						
+						<h:outputLabel value="#{messages['membro.label.idade']}: " for="idade" styleClass="text-input" />
+						<h:outputText id="idade" value="#{membroEditMB.bean.idade}" />
+						
+						<h:outputLabel value="#{messages['membro.label.sexo']}: " for="sexo" styleClass="text-input" />
+						<h:outputText id="sexo" value="#{membroEditMB.bean.sexo}" />
+						
+						<h:outputLabel value="#{messages['membro.label.estadoCivil']}: " for="estadoCivil" styleClass="text-input" />
+						<h:outputText id="estadoCivil" value="#{membroEditMB.bean.estadoCivil}" />
+						
+						<h:outputLabel value="#{messages['membro.label.ativo']}: " for="ativo" styleClass="text-input" />
+						<h:outputText id="ativo" value="Sim" rendered="#{membroEditMB.bean.ativo}" />
+						<h:outputText id="nativo" value="Não" rendered="#{!membroEditMB.bean.ativo}" />
+						
+						<h:outputLabel value="#{messages['membro.label.comungante']}: " for="comungante" styleClass="text-input" />
+						<h:outputText id="comungante" value="Sim" rendered="#{membroEditMB.bean.comungante}" />
+						<h:outputText id="ncomungante" value="Não" rendered="#{!membroEditMB.bean.comungante}" />
+						
+						<!-- Apresenta erro na pagina de edição. Verificar.
+						<p:spacer />
+						<p:commandLink action="/membro_edit.jsf" actionListener="#{membroListMB.clear}"
+						   value="Alterar dados" rendered="#{securityContext.hasRole('Secretaria')}">
+						    <h:outputText value="alterar" />
+							<f:param name="id" value="#{membroEditMB.bean.idMembro}" />
+						</p:commandLink>
+						 -->
+					</h:panelGrid>
+					
+					
+				</p:fieldset>
+				
+				<p:fieldset legend="Familiares" toggleable="true" toggleSpeed="500" collapsed="false">
+					<h:panelGrid id="fieldsFam" columns="2" width="100%">
+						<p:dataList value="#{membroEditMB.bean.familia.ativos}" var="fams">
+							<p:row rendered="#{fams.idMembro!=membroEditMB.bean.idMembro}">
+								<h:outputText value="#{fams.nome}" />
+							</p:row>
+						</p:dataList>
+					</h:panelGrid>
+				</p:fieldset>
+				
+				</h:panelGrid>
+				
+				<p:fieldset legend="Foto" toggleable="false" >
+						<p:graphicImage id="fotoMembro" value="image?id=#{membroEditMB.bean.idFoto}" />
+						
+						<h:panelGrid columns="2" rendered="#{securityContext.hasRole('Secretaria')}">
+							<p:commandButton id="photoUpl" value="Enviar foto" onclick="dlg1.show();" type="button" />
+							<p:commandButton id="photoBtn" value="Capturar foto" onclick="dlg2.show();" type="button" />
+             			</h:panelGrid>
+				</p:fieldset>
+				
+				<p:fieldset legend="Endereço" toggleable="false">
+					<h:outputLabel value="#{messages['familia.label.rua']} " for="rua" styleClass="text-input" />
+					<h:outputText id="rua" value="#{membroEditMB.bean.familia.rua}" />
+					<h:outputLabel value=", " for="nro" styleClass="text-input" />
+					<h:outputText id="nro" value="#{membroEditMB.bean.familia.nro}" />
+					<br/>
+					<h:outputText id="complemento" value="#{membroEditMB.bean.familia.complemento}"/>
+					<br/>
+					<h:outputText id="bairro" value="#{membroEditMB.bean.familia.bairro}" />
+					<br/>
+					<h:outputText id="cep" value="#{membroEditMB.bean.familia.cep}" />
+					<p:spacer width="30px;" height="1px;"/>					
+					<h:outputText id="cidade" value="#{membroEditMB.bean.familia.cidade}" />
+					-
+					<h:outputText id="estado" value="#{membroEditMB.bean.familia.estado}" />
+					
+					<br/>
+       				
+       				<p:commandButton id="btnMap" type="button" icon="ui-icon-pin-s" value="Ver Mapa" 
+       				onclick="dlgMap.show();" rendered="#{securityContext.hasRole('Admin')}" />
+       				
+				</p:fieldset>
+				
+				<p:fieldset legend="Contatos" toggleable="false">
+					<h:panelGrid id="fieldsConts" columns="2" width="100%">
+						<h:outputLabel value="#{messages['familia.label.foneFixo']}: " for="foneFixo" styleClass="text-input" />
+						<h:outputText id="foneFixo" value="#{membroEditMB.bean.familia.foneFixo}" />
+					
+						<h:outputLabel value="#{messages['membro.label.celular']}: " for="celular" styleClass="text-input" />
+						<h:outputText id="celular" value="#{membroEditMB.bean.celular}" />
+					
+						<h:outputLabel value="#{messages['membro.label.email']}: " for="email" styleClass="text-input" />
+						<h:outputText id="email" value="#{membroEditMB.bean.email}" />
+					</h:panelGrid>
+				</p:fieldset>
+			
+			</h:panelGrid>
+			
+			<h:panelGrid id="fieldsA" columns="1" width="100%">
+			
+			<p:fieldset legend="Dados complementares" toggleable="true" toggleSpeed="500" collapsed="false">
+				<h:panelGrid id="fieldsComp" rules="groups" columns="2" width="500px;" columnClasses="textoficha,valorficha">
+				
+					<h:outputLabel value="#{messages['membro.label.localNascimento']}: " for="localNascimento" styleClass="text-input" />
+					<h:outputText id="localNascimento" value="#{membroEditMB.bean.localNascimento}" />
+					
+					<h:outputLabel value="#{messages['membro.label.dataBatismo']}: " for="dataBatismo" styleClass="text-input" />
+					<h:outputText id="dataBatismo" value="#{membroEditMB.bean.dataBatismo}" >
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+					
+					<h:outputLabel value="#{messages['membro.label.localBatismo']}: " for="localBatismo" styleClass="text-input" />
+					<h:outputText id="localBatismo" value="#{membroEditMB.bean.localBatismo}" />
+					
+					<h:outputLabel value="#{messages['membro.label.dataCasamento']}: " for="dataCasamento" styleClass="text-input" />
+					<h:outputText id="dataCasamento" value="#{membroEditMB.bean.dataCasamento}" >
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+					
+					<h:outputLabel value="#{messages['membro.label.localCasamento']}: " for="localCasamento" styleClass="text-input" />
+					<h:outputText id="localCasamento" value="#{membroEditMB.bean.localCasamento}" />
+					
+					<h:outputLabel value="#{messages['membro.label.profissao']}: " for="profissao" styleClass="text-input" />
+					<h:outputText id="profissao" value="#{membroEditMB.bean.profissao}" />
+					
+					<h:outputLabel value="#{messages['membro.label.preechimento']}: " styleClass="text-input" />
+					<p:progressBar value="#{membroEditMB.bean.percCadastro}" labelTemplate="{value}%" 
+					displayOnly="true" styleClass="cad-bar-style" />
+					
+					<h:outputLabel value="#{messages['membro.label.nroofertante']}: " for="nroofertante" styleClass="text-input" />
+					<h:outputText id="nroofertante" value="#{membroEditMB.bean.idMembro}" />
+				
+				</h:panelGrid>
+			</p:fieldset>
+			
+			
+			</h:panelGrid>
+			<br/>
+			<p:fieldset legend="Datas" toggleable="true" toggleSpeed="500" collapsed="true">
+				<h:panelGrid id="fieldsDt" columns="2" width="90%">
+					
+					<h:outputLabel value="#{messages['membro.label.ultima']} em Sta Ceia: " for="dataPart" styleClass="text-input" />
+					<h:outputText id="dataPart" value="#{ultimaParticipacaoMB.ultimaParticipacao(membroEditMB.bean)}" >
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+					
+					<h:outputLabel value="#{messages['membro.label.dataEntrada']}: " for="dataEntrada" styleClass="text-input" />
+					<h:outputText id="dataEntrada" value="#{membroEditMB.bean.dataEntrada}" >
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+					
+					<h:outputLabel value="#{messages['membro.label.dataSaida']}: " for="dataSaida" styleClass="text-input" />
+					<h:outputText id="dataSaida" value="#{membroEditMB.bean.dataSaida}" >
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+					
+					<h:outputLabel value="#{messages['membro.label.cadastro']}: " for="cadastro" styleClass="text-input" />
+					<h:outputText id="cadastro" value="#{membroEditMB.bean.cadastro}" >
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+					
+					<h:outputLabel value="#{messages['membro.label.recadastro']}: " for="recadastro" styleClass="text-input" />
+					<h:outputText id="recadastro" value="#{membroEditMB.bean.recadastro}" >
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+				
+					<h:outputLabel value="Ultima #{messages['membro.label.alteracao']}: " for="alteracao" styleClass="text-input" />
+					<h:outputText id="alteracao" value="#{membroEditMB.bean.alteracao}" >
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+					
+					
+				</h:panelGrid>
+				
+			</p:fieldset>
+			
+			<br/>
+			<p:fieldset legend="Registro pastoral" toggleable="true" toggleSpeed="500" collapsed="true" rendered="#{securityContext.hasRole('Pastor')}">
+				<p:commandButton id="registroBtn" value="Incluir registro pastoral" onclick="dlgRegistro.show();" type="button"/>
+				<br/>
+				<p:dataTable id="registropastoral" var="r" value="#{membroEditMB.bean.registros}" style="witdh:100%;" >
+					<p:column style="width:16px">
+			            <p:rowToggler ajax="false"/>
+			        </p:column>
+			        <p:column headerText="Data" style="width:50px">
+			            <h:outputText value="#{r.dtRegistro}" >
+			            	<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+			            </h:outputText>
+			        </p:column>
+			        <p:column headerText="Pastor">
+			        	<h:outputText value="#{r.pastor.nome}" />
+			        </p:column>
+			        <p:column headerText="Assunto">
+			            <h:outputText value="#{r.assunto}" />
+			        </p:column>
+			        
+			        <p:rowExpansion>
+
+						<table style="width:800px;">
+							<tr><td><h:outputText value="#{r.registroDec}" /></td></tr>
+						</table>
+			        	
+			        </p:rowExpansion>
+				</p:dataTable>
+			</p:fieldset>
+			
+			<p:dialog id="modalDialogUpload" header="Enviar nova Foto" widgetVar="dlg1" 
+				modal="true" height="300" width="650">
+           
+			    <p:fileUpload id="fileIdPhoto" fileUploadListener="#{membroEditMB.uploadPhoto}" mode="advanced" dragDropSupport="false"
+			    	uploadLabel="Enviar" cancelLabel="Cancelar" label="Selecionar"
+			    	invalidSizeMessage="#{messages['membro.foto.invalidsize']}"
+			    	invalidFileMessage="#{messages['membro.foto.invalidfile']}"
+			    	fileLimitMessage="#{messages['membro.foto.filelimit']}"
+             		update="messagesp" sizeLimit="200000" fileLimit="1" allowTypes="/(\.|\/)(JPG|jpg)$/"
+             		oncomplete="document.forms[0].submit();" />
+            	<p:messages id="messagesp" autoUpdate="true" closable="true" />
+            	
+			</p:dialog>
+			
+			<p:dialog id="modalDialog" header="Capturar Foto" widgetVar="dlg2" 
+				modal="true" height="300" width="700">
+			    <h:panelGrid columns="2">
+			    	<p:photoCam widgetVar="pcam" listener="#{membroEditMB.oncapture}" update="photocam"
+			    	width="300" height="200"  />
+			    	
+			        <p:outputPanel id="photocam">
+			            <p:graphicImage value="./images/tmp/#{membroEditMB.filename}.jpg" rendered="#{not empty membroEditMB.filename}"/>
+			        </p:outputPanel>
+			        
+		    		<p:commandButton type="button" value="Capturar" onclick="pcam.capture()"/>
+		    		<p:commandButton value="Salvar" action="#{membroEditMB.salvarFotoCam}" ajax="false"/>
+			    
+			    </h:panelGrid>
+			    <p:messages id="messagescam" autoUpdate="true" closable="true" />
+			</p:dialog>
+			
+			<p:dialog id="modalRegistro" header="Inserir registro pastoral" 
+				widgetVar="dlgRegistro"	modal="true" width="700" height="260">
+						
+				<h:panelGrid id="fieldsregistroPastoral" columns="3">
+					<h:outputLabel value="#{messages['registroPastoral.label.assunto']}: " for="assunto" styleClass="text-input" />
+					
+					<p:inputText id="assunto" value="#{membroEditMB.registro.assunto}" maxlength="100" size="80"
+						title="#{messages['registroPastoral.alt.assunto']}" />
+					<p:message for="assunto" />
+						
+					<h:outputLabel value="#{messages['registroPastoral.label.registro']}: " for="registro" styleClass="text-input" />
+					
+					<p:inputTextarea id="registro" value="#{membroEditMB.registro.registro}"
+					    rows="6" cols="55" autoResize="false" 
+					    maxlength="1500" counter="display" counterTemplate="Restam {0} caracteres."
+						title="#{messages['registroPastoral.alt.registro']}" />
+					<p:message for="registro" />
+					<p:spacer/>
+					<h:outputText id="display" style="color: #A9A9A9; font-size: 11;"/>
+					
+				</h:panelGrid>
+				
+				<h:outputText value="* #{messages['ATENTION-CAP']}: #{messages['registroPastoral.aviso']}" style="color: #A9A9A9;"/><br/>
+				<h:outputText value="* #{messages['registroPastoral.aviso2']}" style="color: #A9A9A9;"/>
+				<br/>
+				<p:toolbar><p:toolbarGroup align="right">
+					<p:commandButton value="#{messages['button.save']}" action="#{membroEditMB.insertRegistro}" ajax="false" />
+				</p:toolbarGroup></p:toolbar>
+				
+			</p:dialog>
+			
+			<p:dialog id="modalMap" header="Mapa" 
+				widgetVar="dlgMap"	modal="true" width="700" height="400">
+				<p:gmap center="-25.4860928,-49.2618211" zoom="16" type="ROADMAP" style="width:600px;height:400px" />
+			</p:dialog>
+			
+		</h:form>
+
+	</ui:define>
+</ui:composition>

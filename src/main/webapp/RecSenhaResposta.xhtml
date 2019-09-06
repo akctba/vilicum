@@ -1,0 +1,20 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		
+		<p:panel header="#{messages['forgot']}">
+			<h:panelGrid id="e1" columns="2" width="100%" >
+				<h:graphicImage value="images/exclamation.png" height="150" width="150" />
+				<h:panelGrid id="e2">
+					<h:outputText value="#{messages['forgot-ok']}" rendered="#{RecSenhaMB.encontrado}"/>
+					<h:outputText value="#{messages['forgot-nok']}" rendered="#{!RecSenhaMB.encontrado}"/>
+					<h:outputText value="#{RecSenhaMB.detalhes}" />
+				</h:panelGrid>
+			</h:panelGrid>
+		</p:panel>
+		
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="iso-8859-1"?> 
+<!DOCTYPE HTML>  
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form prependId="false" rendered="#{securityContext.loggedIn}">
+
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{messages['button.save']}" action="#{pastorEditMB.insert}"
+						rendered="#{!pastorEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.save']}" action="#{pastorEditMB.update}"
+						rendered="#{pastorEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.delete']}" onclick="confirmation.show()"
+						rendered="#{pastorEditMB.updateMode}" type="button" immediate="true" ajax="false" />
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.delete']}" severity="alert" widgetVar="confirmation">
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{pastorEditMB.delete}" immediate="true"
+							ajax="false" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br />
+
+			<p:fieldset legend="#{messages['pastor.label']}">
+				<h:panelGrid id="fields" columns="3">
+					
+					<h:outputLabel value="#{messages['pastor.label.idPastor']}: " for="idPastor" styleClass="text-input" />
+					<h:outputText id="idPastor" value="#{pastorEditMB.bean.idPastor}" />
+					<p:message for="idPastor" />
+					
+					<h:outputLabel value="#{messages['pastor.label.nome']}: " for="nome" styleClass="text-input" />
+					<p:inputText id="nome" value="#{pastorEditMB.bean.nome}"
+						title="#{messages['pastor.alt.nome']}" />
+					<p:message for="nome" />
+					
+					<h:outputLabel value="#{messages['pastor.label.anoFormacao']}: " for="anoFormacao" styleClass="text-input" />
+					<p:inputText id="anoFormacao" value="#{pastorEditMB.bean.anoFormacao}"
+						title="#{messages['pastor.alt.anoFormacao']}" />
+					<p:message for="anoFormacao" />
+					
+					<h:outputLabel value="#{messages['pastor.label.email']}: " for="email" styleClass="text-input" />
+					<p:inputText id="email" value="#{pastorEditMB.bean.email}"
+						title="#{messages['pastor.alt.email']}" />
+					<p:message for="email" />
+					
+					<h:outputLabel value="#{messages['pastor.label.nascimento']}: " for="nascimento" styleClass="text-input" />
+					<p:calendar id="nascimento" value="#{pastorEditMB.bean.nascimento}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['pastor.alt.nascimento']}" />
+					   <p:message for="nascimento" />
+								
+					<h:outputLabel value="#{messages['pastor.label.nomeEsposa']}: " for="nomeEsposa" styleClass="text-input" />
+					<p:inputText id="nomeEsposa" value="#{pastorEditMB.bean.nomeEsposa}"
+						title="#{messages['pastor.alt.nomeEsposa']}" />
+					<p:message for="nomeEsposa" />
+					
+					
+					<!-- <h:outputLabel value="#{messages['pastor.label.cadastro']}: " for="cadastro" styleClass="text-input" />
+					<p:inputText id="cadastro" value="#{pastorEditMB.bean.cadastro}"
+						title="#{messages['pastor.alt.cadastro']}" />
+					<p:message for="cadastro" /> -->
+					
+					<!-- <h:outputLabel value="#{messages['pastor.label.exclusao']}: " for="exclusao" styleClass="text-input" />
+					<p:inputText id="exclusao" value="#{pastorEditMB.bean.exclusao}"
+						title="#{messages['pastor.alt.exclusao']}" />
+					<p:message for="exclusao" /> -->
+					
+				</h:panelGrid>
+			</p:fieldset>
+		<!-- </h:form> -->
+		<p:spacer height="20px;"/>
+		<!-- <h:form prependId="false"> -->
+			<p:fieldset legend="Congregações atendidas" toggleable="true" toggleSpeed="500">
+				
+				<p:dataTable var="at" value="#{pastorEditMB.bean.congregacoes}">
+					<p:column headerText="Congregação">
+					    <h:outputText value="#{at.congregacao.nome}" />
+					</p:column>
+					
+					<p:column headerText="Cidade">
+					    <h:outputText value="#{at.congregacao.cidade}" />
+					</p:column>
+					
+					<p:column headerText="#{messages['congregacaoPastor.label.entrada']}">
+					    <h:outputText value="#{at.entrada}">
+					    	<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="#{messages['congregacaoPastor.label.saida']}">
+					    <h:outputText value="#{at.saida}">
+					    	<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					
+				</p:dataTable>
+			
+				
+			</p:fieldset>
+		
+		</h:form>
+	</ui:define>
+</ui:composition>

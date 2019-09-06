@@ -1,0 +1,64 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form>
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton title="#{messages['button.new']}" icon="ui-icon-document" action="#{registroPastoralListMB.getNextView}"
+						actionListener="#{registroPastoralListMB.clear}" ajax="false" />
+
+					<p:commandButton title="#{messages['button.delete']}" icon="ui-icon-trash" onclick="confirmation.show()"
+						type="button" immediate="true" ajax="false" />
+
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.alert']}!" severity="alert" widgetVar="confirmation">
+
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{registroPastoralListMB.deleteSelection}"
+							actionListener="#{registroPastoralListMB.clear}" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<p:dataTable id="list" var="bean" value="#{registroPastoralListMB.resultList}">
+				<f:facet name="header">#{messages['registroPastoral.list.table.title']}</f:facet>
+				<p:column style="width:2%;">
+					<h:selectBooleanCheckbox value="#{registroPastoralListMB.selection[bean.idReg]}"></h:selectBooleanCheckbox>
+				</p:column>
+				
+				<p:column style="width:5%;" sortBy="#{bean.idReg}">
+					<f:facet name="header">#{messages['registroPastoral.label.idReg']}</f:facet>
+					<h:outputText value="#{bean.idReg}" />
+				</p:column>
+						
+				<p:column sortBy="#{bean.dtRegistro}">
+					<f:facet name="header">#{messages['registroPastoral.label.dtRegistro']}</f:facet>
+					<h:commandLink action="#{registroPastoralListMB.getNextView}" actionListener="#{registroPastoralListMB.clear}">
+						<h:outputText value="#{bean.dtRegistro}" />
+						<f:param name="id" value="#{bean.idReg}" />
+					</h:commandLink>
+				</p:column>
+					
+				<p:column sortBy="#{bean.assunto}">
+					<f:facet name="header">#{messages['registroPastoral.label.assunto']}</f:facet>
+					<h:commandLink action="#{registroPastoralListMB.getNextView}" actionListener="#{registroPastoralListMB.clear}">
+						<h:outputText value="#{bean.assunto}" />
+						<f:param name="id" value="#{bean.idReg}" />
+					</h:commandLink>
+				</p:column>
+					
+				<p:column sortBy="#{bean.registro}">
+					<f:facet name="header">#{messages['registroPastoral.label.registro']}</f:facet>
+					<h:commandLink action="#{registroPastoralListMB.getNextView}" actionListener="#{registroPastoralListMB.clear}">
+						<h:outputText value="#{bean.registro}" />
+						<f:param name="id" value="#{bean.idReg}" />
+					</h:commandLink>
+				</p:column>
+					
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

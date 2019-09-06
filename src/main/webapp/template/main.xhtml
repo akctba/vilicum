@@ -1,0 +1,116 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+<f:view contentType="text/html" locale="#{locales.currentLocale}" />
+
+<h:head>
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="-1" />
+	<title>#{messages['main.app.title']}</title>
+	<link type="text/css" rel="stylesheet" href="css/styles.css" />
+	<link type="text/css" rel="stylesheet" href="css/default.css" />
+	
+	<script src="js/jquery.printElement.js" type="text/javascript"></script>
+	
+	<script type="text/javascript">
+		PrimeFaces.locales['pt_BR'] = {
+		     closeText: 'Fechar',
+		     prevText: 'Anterior',
+		     nextText: 'Próximo',
+		     currentText: 'Começo',
+		     monthNames:
+		['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+		     monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun',
+		'Jul','Ago','Set','Out','Nov','Dez'],
+		     dayNames:
+		['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+		     dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'],
+		     dayNamesMin: ['D','S','T','Q','Q','S','S'],
+		     weekHeader: 'Semana',
+		     firstDay: 0,
+		     isRTL: false,
+		     showMonthAfterYear: false,
+		     yearSuffix: '',
+		     timeOnlyTitle: 'Só Horas',
+		     timeText: 'Tempo',
+		     hourText: 'Hora',
+		     minuteText: 'Minuto',
+		     secondText: 'Segundo',
+		     currentText: 'Hoje',
+		     ampm: false,
+		     month: 'M�s',
+		     week: 'Semana',
+		     day: 'Dia',
+		     allDayText : 'Todo Dia'
+		   };
+	</script>
+	
+	<script type="text/javascript">
+	    window.smartlook||(function(d) {
+	    var o=smartlook=function(){ o.api.push(arguments)},s=d.getElementsByTagName('script')[0];
+	    var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
+	    c.charset='utf-8';c.src='//rec.getsmartlook.com/bundle.js';s.parentNode.insertBefore(c,s);
+	    })(document);
+	    smartlook('init', '4bc8e8b93e7d66dd53181e0e62ae43dc346d104a');
+	</script>
+	
+</h:head>
+
+<h:body style="background-color:#f1f1f1">
+
+	<p:growl id="messages" globalOnly="true" widgetVar="growlmessages"/>
+	<table style="width: 100%">
+		<tr>
+			<td height="70" align="left">
+				<a href="index.jsf"><img src="images/logo.png" border="0" /></a>
+				
+				<ui:remove>
+				<!-- <div style="float: right;">
+					<h:form id="language_form" prependId="true">
+						<h:commandLink action="#{locales.setCurrentLocale('pt_BR')}">
+							<span class="ui-icon-locale-pt" ></span>
+						</h:commandLink>
+						<h:commandLink action="#{locales.setCurrentLocale('en')}">
+							<span class="ui-icon-locale-en" ></span>
+						</h:commandLink>
+					</h:form>
+				</div> -->
+				</ui:remove>
+			</td>
+			<td align="right"><ui:include src="/login.xhtml" /></td>
+		</tr>
+		<tr>
+			<td colspan="2" height="20"><ui:include src="/menu_def.xhtml" /></td>
+		</tr>
+		<tr valign="top">
+			<td colspan="2" height="400" ><ui:insert name="body" /></td>
+		</tr>
+		<tr align="center">
+			<td colspan="2" height="20" align="center" class="text-input">
+				<p:panel>
+					<center>
+					<h:outputText value="#{messages['main.footer.text']}"/>
+					
+					<h:outputText value=" | Ultimo acesso: " rendered="#{securityContext.loggedIn}"/>
+					<h:outputText value="#{credenciais.ultimoAcesso}" rendered="#{securityContext.loggedIn}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm"/>
+					</h:outputText>
+					</center>
+				</p:panel>
+			</td>
+		</tr>
+	</table>
+
+	<p:ajaxStatus style="width:16px;height:16px;">
+		<f:facet name="start">
+		</f:facet>
+
+		<f:facet name="complete">
+			<h:outputText value="" />
+		</f:facet>
+	</p:ajaxStatus>
+	<!-- <link type="text/css" rel="stylesheet" href="css/aristo/skin.css" /> -->
+	<h:outputScript library="js" name="locale-primefaces.js"/>
+</h:body>
+</html>

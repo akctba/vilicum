@@ -1,0 +1,111 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form prependId="false" rendered="#{securityContext.loggedIn}">
+
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{messages['button.save']}(+)" action="#{usuarioEditMB.insert}"
+						rendered="#{!usuarioEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.save']}" action="#{usuarioEditMB.update}"
+						rendered="#{usuarioEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.delete']}" onclick="confirmation.show()"
+						rendered="#{usuarioEditMB.updateMode}" type="button" immediate="true" ajax="false" />
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.delete']}" severity="alert" widgetVar="confirmation">
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{usuarioEditMB.delete}" immediate="true"
+							ajax="false" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br />
+			<h:panelGrid id="grupos" columns="2" width="100%">
+			
+
+				<p:fieldset legend="#{messages['usuario.label']}" toggleable="false">
+					<h:panelGrid id="fields" columns="3">
+						
+						<h:outputLabel value="#{messages['usuario.label.id']}: " for="id" styleClass="text-input" />
+						<p:inputText id="id" value="#{usuarioEditMB.bean.id}"
+							title="#{messages['usuario.alt.id']}" />
+						<p:message for="id" />
+						
+						<h:outputLabel value="#{messages['usuario.label.password']}: " for="password" styleClass="text-input" />
+						<p:password id="password" value="#{usuarioEditMB.password}" title="#{messages['usuario.alt.password']}" 
+						feedback="true" 
+						promptLabel="#{messages['password.label.input']}" 
+					    weakLabel="#{messages['password.label.weak']}"  
+					    goodLabel="#{messages['password.label.good']}" 
+					    strongLabel="#{messages['password.label.strong']}" />
+						<p:message for="password" />
+						
+						<h:outputLabel value="#{messages['usuario.label.trocarSenha']}: " for="trocarSenha" styleClass="text-input" />
+						<h:selectBooleanCheckbox id="trocarSenha" value="#{usuarioEditMB.bean.trocarSenha}" title="#{messages['usuario.alt.trocarSenha']}" />
+						<p:message for="trocarSenha" />
+						
+						<h:outputLabel value="#{messages['usuario.label.nome']}: " for="nome" styleClass="text-input" />
+						<p:inputText id="nome" value="#{usuarioEditMB.bean.nome}"
+							title="#{messages['usuario.alt.nome']}" />
+						<p:message for="nome" />
+						
+						<h:outputLabel value="#{messages['usuario.label.email']}: " for="email" styleClass="text-input" />
+						<p:inputText id="email" value="#{usuarioEditMB.bean.email}"
+							title="#{messages['usuario.alt.email']}" />
+						<p:message for="email" />
+						
+						<h:outputLabel value="#{messages['usuario.label.congregacao']}: " for="congregacao" styleClass="text-input" />
+						<p:selectOneMenu id="congregacao" value="#{usuarioEditMB.bean.congregacao}" effect="fade"
+										converter="simpleEntityConverter"
+										required="true"
+										requiredMessage="Valor é obrigatório"
+										filter="true" filterMatchMode="contains">  
+				            <f:selectItem itemLabel="Selecione a congregaco" itemValue="" />  
+				            <f:selectItems value="#{usuarioEditMB.congregacoes}" var="c" itemLabel="#{c.nome}" itemValue="#{c}"/>  
+				        </p:selectOneMenu>
+						<p:message for="congregacao" />
+						
+						<h:outputLabel value="#{messages['usuario.label.ultimoAcesso']}: " for="ultimoAcesso" styleClass="text-input" />
+						<p:calendar id="ultimoAcesso" value="#{usuarioEditMB.bean.ultimoAcesso}"
+						   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+						   locale="#{locales.currentLocale}" title="#{messages['usuario.alt.ultimoAcesso']}" />
+						   <p:message for="ultimoAcesso" />
+									
+						<h:outputLabel value="#{messages['usuario.label.inclusao']}: " for="inclusao" styleClass="text-input" />
+						<p:calendar id="inclusao" value="#{usuarioEditMB.bean.inclusao}"
+						   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+						   locale="#{locales.currentLocale}" title="#{messages['usuario.alt.inclusao']}" />
+						   <p:message for="inclusao" />
+									
+						<h:outputLabel value="#{messages['usuario.label.exclusao']}: " for="exclusao" styleClass="text-input" />
+						<p:calendar id="exclusao" value="#{usuarioEditMB.bean.exclusao}"
+						   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+						   locale="#{locales.currentLocale}" title="#{messages['usuario.alt.exclusao']}" />
+						   <p:message for="exclusao" />
+									
+						<h:outputLabel value="#{messages['usuario.label.alteracao']}: " for="alteracao" styleClass="text-input" />
+						<p:calendar id="alteracao" value="#{usuarioEditMB.bean.alteracao}"
+						   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+						   locale="#{locales.currentLocale}" title="#{messages['usuario.alt.alteracao']}" />
+						   <p:message for="alteracao" />
+									
+					</h:panelGrid>
+				</p:fieldset>
+				
+				<p:fieldset legend="Perfis" toggleable="false">
+					<p:spacer/>
+					<p:selectManyCheckbox value="#{usuarioEditMB.bean.perfis}" layout="pageDirection"
+						converter="simpleEntityConverter">
+			            <f:selectItems value="#{usuarioEditMB.perfis}" var="p" itemLabel="#{p.nome}" itemValue="#{p}"/>
+			        </p:selectManyCheckbox>
+			        <p:spacer/>
+				</p:fieldset>
+				
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

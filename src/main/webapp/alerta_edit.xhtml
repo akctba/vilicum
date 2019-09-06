@@ -1,0 +1,86 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form prependId="false">
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{messages['button.save']}" action="#{alertaEditMB.insert}"
+						rendered="#{!alertaEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.save']}" action="#{alertaEditMB.update}"
+						rendered="#{alertaEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.delete']}" onclick="confirmation.show()"
+						rendered="#{alertaEditMB.updateMode}" type="button" immediate="true" ajax="false" />
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.delete']}" severity="alert" widgetVar="confirmation">
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{alertaEditMB.delete}" immediate="true"
+							ajax="false" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br />
+
+			<p:fieldset legend="#{messages['alerta.label']}" toggleable="true" toggleSpeed="500">
+				<h:panelGrid id="fieldsalerta" columns="3">
+				
+					<h:outputLabel value="#{messages['alerta.label.idAlerta']}: " for="idAlerta" styleClass="text-input" />
+										
+					<h:outputText id="idAlerta" value="#{alertaEditMB.bean.idAlerta}" />
+					
+					<p:message for="idAlerta" />
+						
+					<h:outputLabel value="#{messages['alerta.label.texto']}: " for="texto" styleClass="text-input" />
+					
+					<p:inputText id="texto" value="#{alertaEditMB.bean.texto}"
+						title="#{messages['alerta.alt.texto']}" />
+					
+					<p:message for="texto" />
+						
+					<h:outputLabel value="#{messages['alerta.label.cadastro']}: " for="cadastro" styleClass="text-input" />
+					
+					<p:calendar id="cadastro" value="#{alertaEditMB.bean.cadastro}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['alerta.alt.cadastro']}" />
+							 
+					<p:message for="cadastro" />
+						
+					<h:outputLabel value="#{messages['alerta.label.validade']}: " for="validade" styleClass="text-input" />
+					
+					<p:calendar id="validade" value="#{alertaEditMB.bean.validade}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['alerta.alt.validade']}" />
+							 
+					<p:message for="validade" />
+						
+					<h:outputLabel value="#{messages['alerta.label.execucao']}: " for="execucao" styleClass="text-input" />
+					
+					<p:calendar id="execucao" value="#{alertaEditMB.bean.execucao}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['alerta.alt.execucao']}" />
+							 
+					<p:message for="execucao" />
+						
+					<!-- <h:outputLabel value="#{messages['executor.label']}: " for="executor" styleClass="text-input" />
+				    <p:selectOneMenu id="executor" value="#{alertaEditMB.bean.executor}"  effect="fade" converter="simpleEntityConverter">
+						<f:selectItem itemLabel="Selecione" itemValue="" />
+						<f:selectItems value="#{alertaEditMB.executorList}" var="varUsuario" itemLabel="#{varUsuario.id}"  itemValue="#{varUsuario}" />						
+					</p:selectOneMenu>
+					<p:message for="executor" /> -->								  
+								 
+					<h:outputLabel value="#{messages['congregacao.label']}: " for="congregacao" styleClass="text-input" />
+				    <p:selectOneMenu id="congregacao" value="#{alertaEditMB.bean.congregacao}"  effect="fade" converter="simpleEntityConverter">
+						<f:selectItem itemLabel="Selecione" itemValue="" />
+						<f:selectItems value="#{alertaEditMB.congregacaoList}" var="varCongregacao" itemLabel="#{varCongregacao.idCon} - #{varCongregacao.nome} - #{varCongregacao.cidade}"  itemValue="#{varCongregacao}" />						
+					</p:selectOneMenu>
+					<p:message for="congregacao" />								  
+								 
+				</h:panelGrid>
+			</p:fieldset>
+			
+		</h:form>
+	</ui:define>
+</ui:composition>

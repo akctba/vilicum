@@ -1,0 +1,64 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form rendered="#{securityContext.loggedIn}">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+
+					<p:commandButton title="Exportar para Excel" icon="ui-icon-calculator" immediate="true" ajax="false" >
+						<p:dataExporter type="xls" target="list" fileName="Participacao_Membros" />
+					</p:commandButton>
+						
+					<p:commandButton title="Exportar para PDF" icon="ui-icon-newwin" immediate="true" ajax="false" >
+						<p:dataExporter type="pdf" target="list" fileName="Participacao_Membros" />
+					</p:commandButton>
+					
+					<p:commandButton title="Imprimir" icon="ui-icon-print" immediate="true" ajax="false"
+						onclick="$('#conteudo').printElement();" />
+						
+				</p:toolbarGroup>
+			</p:toolbar>
+			<p:fieldset legend="Ajuda" toggleable="true"> 
+				<h:outputText value="#{messages['membro.list.participacao.obs']}" />
+			</p:fieldset>
+			<div id="conteudo">
+			<p:dataTable id="list" var="memb" value="#{ultimaParticipacaoMB.lista}" stickyHeader="true"
+				sortBy="#{memb.diasAfastamento}" sortOrder="descending"
+				 paginator="true" rows="50"
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
+				<f:facet name="header"><h:outputText value="#{messages['membro.list.table.participacao']}"/></f:facet>
+				
+				<p:column sortBy="#{memb.idMembro}" width="10%"
+					filterBy="#{memb.idMembro}" filterMatchMode="contains">
+					<f:facet name="header"><h:outputText value="#{messages['membro.label.idMembro']}"/></f:facet>
+					<h:outputText value="#{memb.idMembro}"  style="float:right"/>
+				</p:column>
+				
+				<p:column filterBy="#{memb.nome}" filterMatchMode="contains" sortBy="#{memb.nome}" >
+					<f:facet name="header"><h:outputText value="#{messages['membro.label.nome']}"/></f:facet>
+					<h:outputText value="#{memb.nome}" />
+				</p:column>
+				
+				<p:column sortBy="#{memb.ultima}" >
+					<f:facet name="header"><h:outputText value="#{messages['membro.label.ultima']}"/></f:facet>
+					<h:outputText value="#{memb.ultima}" rendered="#{not empty memb.ultima}" >
+						<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+					<h:outputText value="#{messages['memb.semparticipacao']}" rendered="#{empty memb.ultima}" />
+				</p:column>
+						
+				<p:column sortBy="#{memb.diasAfastamento}">
+					<f:facet name="header"><h:outputText value="#{messages['membro.label.afastamento']}"/></f:facet>
+					<h:outputText value="#{memb.diasAfastamento}" title="#{messages['membro.alt.afastamento']}" />
+				</p:column>
+						
+			</p:dataTable>
+			</div>
+		
+		</h:form>
+
+	</ui:define>
+</ui:composition>

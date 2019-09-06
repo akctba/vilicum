@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="iso-8859-1"?> 
+<!DOCTYPE HTML>  
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form prependId="false" rendered="#{securityContext.loggedIn}">
+
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{messages['button.save']}" action="#{congregacaoPastorEditMB.insert}"
+						rendered="#{!congregacaoPastorEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.save']}" action="#{congregacaoPastorEditMB.update}"
+						rendered="#{congregacaoPastorEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.delete']}" onclick="confirmation.show()"
+						rendered="#{congregacaoPastorEditMB.updateMode}" type="button" immediate="true" ajax="false" />
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.delete']}" severity="alert" widgetVar="confirmation">
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{congregacaoPastorEditMB.delete}" immediate="true"
+							ajax="false" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br />
+
+			<p:fieldset legend="#{messages['congregacaoPastor.label']}" toggleable="true" toggleSpeed="500">
+				<h:panelGrid id="fields" columns="3">
+					
+					<h:outputLabel value="#{messages['congregacaoPastor.label.idCp']}: " for="idCp" styleClass="text-input" />
+					<h:outputText id="idCp" value="#{congregacaoPastorEditMB.bean.idCp}" />
+					<p:message for="idCp" />
+					
+					<h:outputLabel value="#{messages['congregacaoPastor.label.congregacao']}: " for="congregacao" styleClass="text-input" />
+					<p:selectOneMenu id="congregacao" value="#{congregacaoPastorEditMB.bean.congregacao}" effect="fade"
+									converter="simpleEntityConverter"
+									required="true"
+									requiredMessage="é necessário selecionar a congregação."
+									filter="true" filterMatchMode="contains">  
+			            <f:selectItem itemLabel="Selecione a congregação" itemValue="" />  
+			            <f:selectItems value="#{congregacaoPastorEditMB.congregacoes}" var="c" itemLabel="#{c.nome}" itemValue="#{c}"/>  
+			        </p:selectOneMenu>
+					<p:message for="congregacao" />
+					
+					<h:outputLabel value="#{messages['congregacaoPastor.label.pastor']}: " for="pastor" styleClass="text-input" />
+					<p:selectOneMenu id="pastor" value="#{congregacaoPastorEditMB.bean.pastor}" effect="fade"
+									converter="simpleEntityConverter"
+									required="true"
+									requiredMessage="é necessário selecionar o pastor."
+									filter="true" filterMatchMode="contains">  
+			            <f:selectItem itemLabel="Selecione o pastor" itemValue="" />  
+			            <f:selectItems value="#{congregacaoPastorEditMB.pastores}" var="p" itemLabel="#{p.nome}" itemValue="#{p}"/>  
+			        </p:selectOneMenu>
+					<p:message for="pastor" />
+					
+					<h:outputLabel value="#{messages['congregacaoPastor.label.entrada']}: " for="entrada" styleClass="text-input" />
+					<p:calendar id="entrada" value="#{congregacaoPastorEditMB.bean.entrada}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['congregacaoPastor.alt.entrada']}" />
+					   <p:message for="entrada" />
+					
+					<h:outputLabel value="#{messages['congregacaoPastor.label.saida']}: " for="saida" styleClass="text-input" />
+					<p:calendar id="saida" value="#{congregacaoPastorEditMB.bean.saida}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['congregacaoPastor.alt.saida']}" />
+					   <p:message for="saida" />
+					
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>

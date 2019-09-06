@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="iso-8859-1"?> 
+<!DOCTYPE HTML>  
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form rendered="#{securityContext.loggedIn}">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton title="#{messages['button.new']}" icon="ui-icon-document" action="#{congregacaoPastorListMB.getNextView}"
+						actionListener="#{congregacaoPastorListMB.clear}" ajax="false" />
+
+					<p:commandButton title="#{messages['button.delete']}" icon="ui-icon-trash" onclick="confirmation.show()"
+						type="button" immediate="true" ajax="false" />
+
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.alert']}!" severity="alert" widgetVar="confirmation">
+
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{congregacaoPastorListMB.deleteSelection}"
+							actionListener="#{congregacaoPastorListMB.clear}" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<p:dataTable id="list" var="bean" value="#{congregacaoPastorListMB.resultList}">
+				<f:facet name="header">#{messages['congregacaoPastor.list.table.title']}</f:facet>
+				<p:column style="width:1%;">
+					<h:selectBooleanCheckbox value="#{congregacaoPastorListMB.selection[bean.idCp]}"></h:selectBooleanCheckbox>
+				</p:column>
+				
+				<p:column style="width:5%;" sortBy="#{bean.idCp}">
+					<f:facet name="header">#{messages['congregacaoPastor.label.idCp']}</f:facet>
+					<h:outputText value="#{bean.idCp}" />
+				</p:column>
+						
+				<p:column sortBy="#{bean.congregacao}">
+					<f:facet name="header">#{messages['congregacaoPastor.label.congregacao']}</f:facet>
+					<h:commandLink action="#{congregacaoPastorListMB.getNextView}" actionListener="#{congregacaoPastorListMB.clear}">
+						<h:outputText value="#{bean.congregacao.nome}" />
+						<f:param name="id" value="#{bean.idCp}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.pastor}">
+					<f:facet name="header">#{messages['congregacaoPastor.label.pastor']}</f:facet>
+					<h:commandLink action="#{congregacaoPastorListMB.getNextView}" actionListener="#{congregacaoPastorListMB.clear}">
+						<h:outputText value="#{bean.pastor.nome}" />
+						<f:param name="id" value="#{bean.idCp}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.entrada}">
+					<f:facet name="header">#{messages['congregacaoPastor.label.entrada']}</f:facet>
+					<h:commandLink action="#{congregacaoPastorListMB.getNextView}" actionListener="#{congregacaoPastorListMB.clear}">
+						<h:outputText value="#{bean.entrada}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						<f:param name="id" value="#{bean.idCp}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.saida}">
+					<f:facet name="header">#{messages['congregacaoPastor.label.saida']}</f:facet>
+					<h:commandLink action="#{congregacaoPastorListMB.getNextView}" actionListener="#{congregacaoPastorListMB.clear}">
+						<h:outputText value="#{bean.saida}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						<f:param name="id" value="#{bean.idCp}" />
+					</h:commandLink>
+				</p:column>
+						
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

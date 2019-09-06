@@ -1,0 +1,83 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form prependId="false" rendered="#{securityContext.loggedIn}">
+
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="#{messages['button.save']}" action="#{congregacaoEditMB.insert}"
+						rendered="#{!congregacaoEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.save']}" action="#{congregacaoEditMB.update}"
+						rendered="#{congregacaoEditMB.updateMode}" ajax="false" />
+					<p:commandButton value="#{messages['button.delete']}" onclick="confirmation.show()"
+						rendered="#{congregacaoEditMB.updateMode}" type="button" immediate="true" ajax="false" />
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.delete']}" severity="alert" widgetVar="confirmation">
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{congregacaoEditMB.delete}" immediate="true"
+							ajax="false" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<br />
+
+			<p:fieldset legend="#{messages['congregacao.label']}" toggleable="true" toggleSpeed="500">
+				<h:panelGrid id="fields" columns="3">
+					
+					<h:outputLabel value="#{messages['congregacao.label.idCon']}: " for="idCon" styleClass="text-input" />
+					<h:outputText id="idCon" value="#{congregacaoEditMB.bean.idCon}" />
+					<p:message for="idCon" />
+					
+					<h:outputLabel value="#{messages['congregacao.label.nome']}: " for="nome" styleClass="text-input" />
+					<p:inputText id="nome" value="#{congregacaoEditMB.bean.nome}"
+						title="#{messages['congregacao.alt.nome']}" />
+					<p:message for="nome" />
+					
+					<h:outputLabel value="#{messages['congregacao.label.cidade']}: " for="cidade" styleClass="text-input" />
+					<p:inputText id="cidade" value="#{congregacaoEditMB.bean.cidade}"
+						title="#{messages['congregacao.alt.cidade']}" />
+					<p:message for="cidade" />
+					
+					<h:outputLabel value="#{messages['congregacao.label.bairro']}: " for="bairro" styleClass="text-input" />
+					<p:inputText id="bairro" value="#{congregacaoEditMB.bean.bairro}"
+						title="#{messages['congregacao.alt.bairro']}" />
+					<p:message for="bairro" />
+					
+					<h:outputLabel value="#{messages['congregacao.label.site']}: " for="site" styleClass="text-input" />
+					<p:inputText id="site" value="#{congregacaoEditMB.bean.site}"
+						title="#{messages['congregacao.alt.site']}" />
+					<p:message for="site" />
+					
+					<h:outputLabel value="#{messages['congregacao.label.email']}: " for="email" styleClass="text-input" />
+					<p:inputText id="email" value="#{congregacaoEditMB.bean.email}"
+						title="#{messages['congregacao.alt.email']}" />
+					<p:message for="email" />
+					
+					<h:outputLabel value="#{messages['congregacao.label.fundacao']}: " for="fundacao" styleClass="text-input" />
+					<p:calendar id="fundacao" value="#{congregacaoEditMB.bean.fundacao}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['congregacao.alt.fundacao']}" />
+					   <p:message for="fundacao" />
+								
+					<h:outputLabel value="#{messages['congregacao.label.lema']}: " for="lema" styleClass="text-input" />
+					<p:inputText id="lema" value="#{congregacaoEditMB.bean.lema}"
+						title="#{messages['congregacao.alt.lema']}" />
+					<p:message for="lema" />
+					
+					<h:outputLabel value="#{messages['congregacao.label.historico']}: " for="historico" styleClass="text-input" />
+					<p:inputTextarea id="historico" value="#{congregacaoEditMB.bean.historico}"
+						title="#{messages['congregacao.alt.historico']}"
+						rows="5" cols="60" counter="counter" maxlength="250"     
+    					counterTemplate="Restam {0} caracteres." autoResize="true"/>
+    				<h:outputText id="counter" style="font-size:60%" />
+					<p:message for="historico" />
+					
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>

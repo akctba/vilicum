@@ -1,0 +1,136 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form rendered="#{securityContext.loggedIn}">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton title="#{messages['button.new']}" icon="ui-icon-document" action="#{congregacaoListMB.getNextView}"
+						actionListener="#{congregacaoListMB.clear}" ajax="false" />
+
+					<p:commandButton title="#{messages['button.delete']}" icon="ui-icon-trash" onclick="confirmation.show()"
+						type="button" immediate="true" ajax="false" />
+
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.alert']}!" severity="alert" widgetVar="confirmation">
+
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{congregacaoListMB.deleteSelection}"
+							actionListener="#{congregacaoListMB.clear}" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<p:dataTable id="list" var="bean" value="#{congregacaoListMB.resultList}">
+				<f:facet name="header">#{messages['congregacao.list.table.title']}</f:facet>
+				<p:column style="width:1%;">
+					<h:selectBooleanCheckbox value="#{congregacaoListMB.selection[bean.idCon]}"></h:selectBooleanCheckbox>
+				</p:column>
+				
+				<p:column style="width:5%;" sortBy="#{bean.idCon}">
+					<f:facet name="header">#{messages['congregacao.label.idCon']}</f:facet>
+					<h:outputText value="#{bean.idCon}" />
+				</p:column>
+						
+				<p:column sortBy="#{bean.nome}">
+					<f:facet name="header">#{messages['congregacao.label.nome']}</f:facet>
+					<h:commandLink action="#{congregacaoListMB.getNextView}" actionListener="#{congregacaoListMB.clear}">
+						<h:outputText value="#{bean.nome}" />
+						<f:param name="id" value="#{bean.idCon}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.cidade}">
+					<f:facet name="header">#{messages['congregacao.label.cidade']}</f:facet>
+					<h:commandLink action="#{congregacaoListMB.getNextView}" actionListener="#{congregacaoListMB.clear}">
+						<h:outputText value="#{bean.cidade}" />
+						<f:param name="id" value="#{bean.idCon}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.bairro}">
+					<f:facet name="header">#{messages['congregacao.label.bairro']}</f:facet>
+					<h:commandLink action="#{congregacaoListMB.getNextView}" actionListener="#{congregacaoListMB.clear}">
+						<h:outputText value="#{bean.bairro}" />
+						<f:param name="id" value="#{bean.idCon}" />
+					</h:commandLink>
+				</p:column>
+						
+				<!-- <p:column sortBy="#{bean.site}">
+					<f:facet name="header">#{messages['congregacao.label.site']}</f:facet>
+					<h:commandLink action="#{congregacaoListMB.getNextView}" actionListener="#{congregacaoListMB.clear}">
+						<h:outputText value="#{bean.site}" />
+						<f:param name="id" value="#{bean.idCon}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.email}">
+					<f:facet name="header">#{messages['congregacao.label.email']}</f:facet>
+					<h:commandLink action="#{congregacaoListMB.getNextView}" actionListener="#{congregacaoListMB.clear}">
+						<h:outputText value="#{bean.email}" />
+						<f:param name="id" value="#{bean.idCon}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.fundacao}">
+					<f:facet name="header">#{messages['congregacao.label.fundacao']}</f:facet>
+					<h:commandLink action="#{congregacaoListMB.getNextView}" actionListener="#{congregacaoListMB.clear}">
+						<h:outputText value="#{bean.fundacao}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						<f:param name="id" value="#{bean.idCon}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.lema}">
+					<f:facet name="header">#{messages['congregacao.label.lema']}</f:facet>
+					<h:commandLink action="#{congregacaoListMB.getNextView}" actionListener="#{congregacaoListMB.clear}">
+						<h:outputText value="#{bean.lema}" />
+						<f:param name="id" value="#{bean.idCon}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.pastores}">
+					<f:facet name="header">#{messages['congregacao.label.pastores']}</f:facet>
+					<h:commandLink action="#{congregacaoListMB.getNextView}" actionListener="#{congregacaoListMB.clear}">
+						<h:outputText value="#{bean.pastores}" />
+						<f:param name="id" value="#{bean.idCon}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.historico}">
+					<f:facet name="header">#{messages['congregacao.label.historico']}</f:facet>
+					<h:commandLink action="#{congregacaoListMB.getNextView}" actionListener="#{congregacaoListMB.clear}">
+						<h:outputText value="#{bean.historico}" />
+						<f:param name="id" value="#{bean.idCon}" />
+					</h:commandLink>
+				</p:column> -->
+						
+				<p:column sortBy="#{bean.cadastro}">
+					<f:facet name="header">#{messages['congregacao.label.cadastro']}</f:facet>
+					<h:commandLink action="#{congregacaoListMB.getNextView}" actionListener="#{congregacaoListMB.clear}">
+						<h:outputText value="#{bean.cadastro}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
+						<f:param name="id" value="#{bean.idCon}" />
+					</h:commandLink>
+				</p:column>
+				
+				<p:column sortBy="#{bean.exclusao}">
+					<f:facet name="header">#{messages['congregacao.label.exclusao']}</f:facet>
+					<h:commandLink action="#{congregacaoListMB.getNextView}" actionListener="#{congregacaoListMB.clear}">
+						<h:outputText value="#{bean.exclusao}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
+						<f:param name="id" value="#{bean.idCon}" />
+					</h:commandLink>
+				</p:column>
+						
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

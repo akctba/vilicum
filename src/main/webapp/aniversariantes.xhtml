@@ -1,0 +1,52 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form>
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton title="Exportar para Excel" icon="ui-icon-calculator" immediate="true" ajax="false" >
+						<p:dataExporter type="xls" target="list" fileName="Aniversariantes" />
+					</p:commandButton>
+						
+					<p:commandButton title="Exportar para PDF" icon="ui-icon-newwin" immediate="true" ajax="false" >
+						<p:dataExporter type="pdf" target="list" fileName="Aniversariantes" />
+					</p:commandButton>
+						
+					<p:commandButton title="Imprimir" icon="ui-icon-print" immediate="true" ajax="false"
+						onclick="$('#conteudo').printElement();" />
+				</p:toolbarGroup>
+			</p:toolbar>
+				
+			<div id="conteudo">
+				<p:dataTable id="list" var="memb" value="#{membroListMB.resultList}" stickyHeader="true"
+				 paginator="true" rows="50" 
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
+				<f:facet name="header"><h:outputText value="#{messages['membro.list.table.aniver']}"/></f:facet>
+				
+					<p:column filterBy="#{memb.mesAniver}" headerText="#{messages['membro.label.mesAniver']}" 
+					sortBy="#{memb.mesAniver}" filterMatchMode="exact" filterOptions="#{membroListMB.mesesOptions}"
+					width="20%" >
+						
+						<h:outputText value="#{memb.mesAniver}" />
+					</p:column>
+					<p:column sortBy="#{memb.diaAniver}" width="20%" >
+						<f:facet name="header"><h:outputText value="#{messages['membro.label.diaAniver']}"/></f:facet>
+						<h:outputText value="#{memb.diaAniver}" />
+					</p:column>
+			
+					<p:column sortBy="#{memb.nome}" width="60%"
+						filterBy="#{memb.nome}" filterMatchMode="contains">
+						<f:facet name="header"><h:outputText value="#{messages['membro.label.nome']}"/></f:facet>
+						<h:outputText value="#{memb.nome}" />
+					</p:column>
+			
+				</p:dataTable>
+				
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

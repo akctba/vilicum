@@ -1,0 +1,155 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" template="/template/main.xhtml">
+
+	<ui:define name="body" rendered="#{securityContext.loggedIn}">
+		<h:form>
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton title="#{messages['button.new']}" icon="ui-icon-document" action="#{familiaListMB.getNextView}"
+						actionListener="#{familiaListMB.clear}" ajax="false" rendered="#{securityContext.hasRole('Secretaria')}" />
+
+					<p:commandButton title="#{messages['button.delete']}" icon="ui-icon-trash" onclick="confirmation.show()"
+						type="button" immediate="true" ajax="false" rendered="#{securityContext.hasRole('Secretaria')}" />
+						
+					<p:commandButton title="Exportar para Excel" icon="ui-icon-calculator" immediate="true" ajax="false" >
+						<p:dataExporter type="xls" target="list" fileName="Membros" />
+					</p:commandButton>
+						
+					<p:commandButton title="Exportar para PDF" icon="ui-icon-newwin" immediate="true" ajax="false" >
+						<p:dataExporter type="pdf" target="list" fileName="Membros" />
+					</p:commandButton>
+						
+					<p:commandButton title="Imprimir" icon="ui-icon-print" immediate="true" ajax="false"
+						onclick="$('#conteudo').printElement();" />
+
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.alert']}!" severity="alert" widgetVar="confirmation">
+
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{familiaListMB.deleteSelection}"
+							actionListener="#{familiaListMB.clear}" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<div id="conteudo">
+			<p:dataTable id="list" var="bean" value="#{familiaListMB.resultList}"
+				paginator="true" rows="15"
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
+				<f:facet name="header"><h:outputText value="#{messages['familia.list.table.title']}"/></f:facet>
+				<p:column style="width:1%;">
+					<h:selectBooleanCheckbox value="#{familiaListMB.selection[bean.idFam]}"></h:selectBooleanCheckbox>
+				</p:column>
+				
+				<p:column style="width:5%;" sortBy="#{bean.idFam}">
+					<f:facet name="header"><h:outputText value="#{messages['familia.label.idFam']}" /></f:facet>
+					<h:outputText value="#{bean.idFam}" />
+				</p:column>
+						
+				<p:column sortBy="#{bean.nome}" headerText="#{messages['familia.label.nome']}" 
+					filterBy="#{bean.nome}" filterMatchMode="contains">
+					<f:facet name="header"><h:outputText value="#{messages['familia.label.nome']}"/></f:facet>
+					<h:commandLink action="#{familiaListMB.getNextView}" actionListener="#{familiaListMB.clear}" rendered="#{securityContext.hasRole('Secretaria')}">
+						<h:outputText value="#{bean.nome}" />
+						<f:param name="id" value="#{bean.idFam}" />
+					</h:commandLink>
+					<h:outputText value="#{bean.nome}" rendered="#{!securityContext.hasRole('Secretaria')}" />
+				</p:column>
+						
+				<p:column sortBy="#{bean.membros}" >
+					<f:facet name="header"><h:outputText value="#{messages['familia.label.membros']}"/></f:facet>
+					<h:outputText value="#{fn:length(bean.membros)}" />
+				</p:column>
+					<!-- 	
+				<p:column sortBy="#{bean.rua}">
+					<f:facet name="header">#{messages['familia.label.rua']}</f:facet>
+					<h:commandLink action="#{familiaListMB.getNextView}" actionListener="#{familiaListMB.clear}">
+						<h:outputText value="#{bean.rua}" />
+						<f:param name="id" value="#{bean.idFam}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.nro}">
+					<f:facet name="header">#{messages['familia.label.nro']}</f:facet>
+					<h:commandLink action="#{familiaListMB.getNextView}" actionListener="#{familiaListMB.clear}">
+						<h:outputText value="#{bean.nro}" />
+						<f:param name="id" value="#{bean.idFam}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.complemento}">
+					<f:facet name="header">#{messages['familia.label.complemento']}</f:facet>
+					<h:commandLink action="#{familiaListMB.getNextView}" actionListener="#{familiaListMB.clear}">
+						<h:outputText value="#{bean.complemento}" />
+						<f:param name="id" value="#{bean.idFam}" />
+					</h:commandLink>
+				</p:column>
+						 -->
+				<p:column sortBy="#{bean.bairro}">
+					<f:facet name="header"><h:outputText value="#{messages['familia.label.bairro']}"/></f:facet>
+					<h:outputText value="#{bean.bairro}" />
+				</p:column>
+						<!-- 
+				<p:column sortBy="#{bean.cep}">
+					<f:facet name="header">#{messages['familia.label.cep']}</f:facet>
+					<h:commandLink action="#{familiaListMB.getNextView}" actionListener="#{familiaListMB.clear}">
+						<h:outputText value="#{bean.cep}" />
+						<f:param name="id" value="#{bean.idFam}" />
+					</h:commandLink>
+				</p:column>
+						 -->
+				<p:column sortBy="#{bean.cidade}">
+					<f:facet name="header"><h:outputText value="#{messages['familia.label.cidade']}"/></f:facet>
+					<h:outputText value="#{bean.cidade}" />
+				</p:column>
+						<!-- 
+				<p:column sortBy="#{bean.estado}">
+					<f:facet name="header">#{messages['familia.label.estado']}</f:facet>
+					<h:commandLink action="#{familiaListMB.getNextView}" actionListener="#{familiaListMB.clear}">
+						<h:outputText value="#{bean.estado}" />
+						<f:param name="id" value="#{bean.idFam}" />
+					</h:commandLink>
+				</p:column>
+						 -->
+				<p:column sortBy="#{bean.foneFixo}">
+					<f:facet name="header"><h:outputText value="#{messages['familia.label.foneFixo']}"/></f:facet>
+					<h:outputText value="#{bean.foneFixo}" />
+				</p:column>
+						<!-- 
+				<p:column sortBy="#{bean.cadastro}">
+					<f:facet name="header">#{messages['familia.label.cadastro']}</f:facet>
+					<h:commandLink action="#{familiaListMB.getNextView}" actionListener="#{familiaListMB.clear}">
+						<h:outputText value="#{bean.cadastro}" />
+						<f:param name="id" value="#{bean.idFam}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.alteracao}">
+					<f:facet name="header">#{messages['familia.label.alteracao']}</f:facet>
+					<h:commandLink action="#{familiaListMB.getNextView}" actionListener="#{familiaListMB.clear}">
+						<h:outputText value="#{bean.alteracao}" />
+						<f:param name="id" value="#{bean.idFam}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.exclusao}">
+					<f:facet name="header">#{messages['familia.label.exclusao']}</f:facet>
+					<h:commandLink action="#{familiaListMB.getNextView}" actionListener="#{familiaListMB.clear}">
+						<h:outputText value="#{bean.exclusao}" />
+						<f:param name="id" value="#{bean.idFam}" />
+					</h:commandLink>
+				</p:column>
+						 -->
+						
+				<p:column sortBy="#{bean.congregacao}" rendered="#{securityContext.hasRole('Admin')}">
+					<f:facet name="header"><h:outputText value="#{messages['familia.label.congregacao']}"/></f:facet>
+					<h:outputText value="#{bean.congregacao.nome}" />
+				</p:column>
+			</p:dataTable>
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

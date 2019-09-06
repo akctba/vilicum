@@ -1,0 +1,27 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		
+		<h:form>
+			<p:panel header="#{messages['login.esqueci']}" >
+				<h:outputText value="#{messages['forgotpassword']}" />
+				<h:panelGrid id="geral" columns="3" >
+					<h:outputLabel value="#{messages['usuario.label.login']}: " for="loginrec" styleClass="text-input" />
+					<p:inputText id="loginrec" value="#{recSenhaMB.loginrec}" title="#{messages['usuario.alt.login']}" />
+					<p:message for="loginrec"/>
+					
+					<h:outputLabel value="#{messages['usuario.label.email']}: " for="email" styleClass="text-input" />
+					<p:inputText id="email" value="#{recSenhaMB.email}" title="#{messages['usuario.alt.email']}" />
+					<p:message for="email"/>
+					
+					<p:commandButton value="#{messages['forgot-rec']}" action="#{recSenhaMB.retrieve}" />
+					
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+		
+	</ui:define>
+
+</ui:composition>

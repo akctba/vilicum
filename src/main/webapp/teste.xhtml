@@ -1,0 +1,22 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form>
+			<p:dataGrid columns="2">
+				<h:outputLabel value="#{messages['familia.label.cep']}: " for="cep" styleClass="text-input" />
+				<p:inputMask id="cep" value=""
+						mask="99999-999" title="#{messages['familia.alt.cep']}" />
+					
+				<h:outputLabel value="#{messages['familia.label.rua']}: " for="rua" styleClass="text-input" />
+					<h:inputText id="rua" value="#{familiaEditMB.bean.rua}"
+						title="#{messages['familia.alt.rua']}" />
+						
+					
+				
+			
+			</p:dataGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

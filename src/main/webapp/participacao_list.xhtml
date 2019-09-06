@@ -1,0 +1,64 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:form rendered="#{securityContext.loggedIn}">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton title="#{messages['button.new']}" icon="ui-icon-document" action="#{participacaoListMB.getNextView}"
+						actionListener="#{participacaoListMB.clear}" ajax="false" />
+
+					<p:commandButton title="#{messages['button.delete']}" icon="ui-icon-trash" onclick="confirmation.show()"
+						type="button" immediate="true" ajax="false" />
+
+					<p:confirmDialog message="#{messages['label.confirm.delete']}" showEffect="bounce" hideEffect="explode"
+						header="#{messages['label.dialog.alert']}!" severity="alert" widgetVar="confirmation">
+
+						<h:commandButton value="#{messages['button.dialog.yes']}" action="#{participacaoListMB.deleteSelection}"
+							actionListener="#{participacaoListMB.clear}" />
+						<h:commandButton value="#{messages['button.dialog.no']}" onclick="confirmation.hide()" type="button" />
+					</p:confirmDialog>
+				</p:toolbarGroup>
+			</p:toolbar>
+			<p:dataTable id="list" var="bean" value="#{participacaoListMB.resultList}">
+				<f:facet name="header">#{messages['participacao.list.table.title']}</f:facet>
+				<p:column style="width:1%;">
+					<h:selectBooleanCheckbox value="#{participacaoListMB.selection[bean.idPart]}"></h:selectBooleanCheckbox>
+				</p:column>
+				
+				<p:column style="width:5%;" sortBy="#{bean.idPart}">
+					<f:facet name="header">#{messages['participacao.label.idPart']}</f:facet>
+					<h:outputText value="#{bean.idPart}" />
+				</p:column>
+						
+				<p:column sortBy="#{bean.culto}">
+					<f:facet name="header">#{messages['participacao.label.culto']}</f:facet>
+					<h:commandLink action="#{participacaoListMB.getNextView}" actionListener="#{participacaoListMB.clear}">
+						<h:outputText value="#{bean.culto}" />
+						<f:param name="id" value="#{bean.idPart}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.membro}">
+					<f:facet name="header">#{messages['participacao.label.membro']}</f:facet>
+					<h:commandLink action="#{participacaoListMB.getNextView}" actionListener="#{participacaoListMB.clear}">
+						<h:outputText value="#{bean.membro}" />
+						<f:param name="id" value="#{bean.idPart}" />
+					</h:commandLink>
+				</p:column>
+						
+				<p:column sortBy="#{bean.obs}">
+					<f:facet name="header">#{messages['participacao.label.obs']}</f:facet>
+					<h:commandLink action="#{participacaoListMB.getNextView}" actionListener="#{participacaoListMB.clear}">
+						<h:outputText value="#{bean.obs}" />
+						<f:param name="id" value="#{bean.idPart}" />
+					</h:commandLink>
+				</p:column>
+						
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

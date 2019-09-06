@@ -1,0 +1,145 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<h:outputText value="Acesso Negado" rendered="#{!securityContext.loggedIn}" />
+		<h:form prependId="false" rendered="#{securityContext.loggedIn}">
+		
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+							            
+		            <h:outputLabel value="#{messages['relatorio.secretaria.inicial']}: " for="de" styleClass="text-input" />
+					<p:calendar id="de" value="#{relSecretariaView.de}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['relatorio.secretaria.inicial']}" />
+					<h:outputLabel value="#{messages['relatorio.secretaria.final']}: " for="ate" styleClass="text-input" />
+					<p:calendar id="ate" value="#{relSecretariaView.ate}"
+					   pattern="#{messages['label.date.pattern']}" navigator="true" showButtonPanel="true"
+					   locale="#{locales.currentLocale}" title="#{messages['relatorio.secretaria.final']}" />
+					
+		           	<p:commandButton title="#{messages['relatorio.secretaria.pesquisar']}" 
+		           	icon="ui-icon-refresh" value="#{messages['relatorio.secretaria.pesquisar']}"
+		           		action="#{relSecretariaView.pesquisar}" ajax="false" />
+					
+					<span class="ui-separator">
+		                <span class="ui-icon ui-icon-grip-dotted-vertical" />
+		            </span>
+
+					<p:commandButton title="Imprimir" icon="ui-icon-print" immediate="true" ajax="false"
+						onclick="$('#conteudo').printElement();" />
+						
+				</p:toolbarGroup>
+			</p:toolbar>
+			
+			<div id="conteudo">
+			<h:panelGrid id="geral" columns="1" width="100%" >
+				<h1><h:outputText value="#{messages['relatorio.secretaria']} - #{relSecretariaView.periodo}" /></h1>
+				<p:panel id="qtdmembros" header="Membros cadastrados" style="color:black;">
+					<h:panelGrid id="tabeladados" columns="2">
+						<p:dataTable var="res" value="#{relSecretariaView.resumo}" >
+							<p:column><h:outputText value="#{res.assunto}"/></p:column>
+							<p:column headerText="#{relSecretariaView.ano1}"><h:outputText value="#{res.valor1}"/></p:column>
+							<p:column headerText="#{relSecretariaView.ano2}"><h:outputText value="#{res.valor2}"/></p:column>
+							<p:column headerText="#{relSecretariaView.ano3}"><h:outputText value="#{res.valor3}"/></p:column>
+						</p:dataTable>
+						
+						<p:pieChart value="#{relSecretariaView.membros1}" legendPosition="e" 
+						   id="membros1" style="width:350px;height:200px" showDataLabels="true" 
+						   dataFormat="percent" />
+						
+						
+					</h:panelGrid>
+				</p:panel>
+				
+				<p:panel id="movimentacao" header="Movimentações">
+					<h:panelGrid id="tabelaMov" columns="2">
+						
+						<p:dataTable var="ent" value="#{relSecretariaView.entradas}" emptyMessage="#{messages['relatorio.secretaria.zeroentradas']}" 
+							sortBy="#{ent.datamov}">
+							<f:facet name="header">
+								<h:outputText value="#{messages['relatorio.secretaria.entradas']}"/>
+							</f:facet>
+							<p:column headerText="#{messages['mes']}">
+								<h:outputText value="#{ent.datamov}">
+									<f:convertDateTime pattern="MMMM"/>
+								</h:outputText>
+							</p:column>
+							<p:column headerText="#{messages['membro.label.nome']}" >
+								<h:outputText value="#{ent.membro}" title="#{ent.idMem}"/>
+							</p:column>
+							<p:column headerText="#{messages['membro.label.formaIngresso']}">
+								<h:outputText value="#{ent.motivo}" />
+							</p:column>
+							
+						</p:dataTable>
+						
+						<p:dataTable var="sai" value="#{relSecretariaView.saidas}" emptyMessage="#{messages['relatorio.secretaria.zerosaidas']}" 
+						sortBy="#{sai.datamov}">
+							<f:facet name="header">
+								<h:outputText value="#{messages['relatorio.secretaria.saidas']}"/>
+							</f:facet>
+							<p:column headerText="#{messages['mes']}">
+								<h:outputText value="#{sai.datamov}">
+									<f:convertDateTime pattern="MMMM"/>
+								</h:outputText>
+							</p:column>
+							<p:column headerText="#{messages['membro.label.nome']}">
+								<h:outputText value="#{sai.membro}"  title="#{sai.idMem}"/>
+							</p:column>
+							<p:column headerText="#{messages['membro.label.motivoInativo']}">
+								<h:outputText value="#{sai.motivo}" />
+							</p:column>
+						</p:dataTable>
+					
+					</h:panelGrid>
+				</p:panel>
+				
+				<p:panel id="freqcultos" header="Média de frequência nos cultos">
+					<h:outputText value="* Por final de semana" />
+					<p:barChart animate="false" value="#{relSecretariaView.frequencia}" legendPosition="ne" 
+					style="width:80%;" />
+					
+					<p:dataTable var="ano" value="#{relSecretariaView.frequencia.series}" style="width:80%;">
+					
+						<p:column><b><h:outputText value="#{ano.label}" /></b></p:column>
+						<p:column headerText="Jan"><h:outputText value="#{ano.data.get('Jan')}" /></p:column>
+						<p:column headerText="Fev"><h:outputText value="#{ano.data.get('Fev')}" /></p:column>
+						<p:column headerText="Mar"><h:outputText value="#{ano.data.get('Mar')}" /></p:column>
+						<p:column headerText="Abr"><h:outputText value="#{ano.data.get('Abr')}" /></p:column>
+						<p:column headerText="Mai"><h:outputText value="#{ano.data.get('Mai')}" /></p:column>
+						<p:column headerText="Jun"><h:outputText value="#{ano.data.get('Jun')}" /></p:column>
+						<p:column headerText="Jul"><h:outputText value="#{ano.data.get('Jul')}" /></p:column>
+						<p:column headerText="Ago"><h:outputText value="#{ano.data.get('Ago')}" /></p:column>
+						<p:column headerText="Set"><h:outputText value="#{ano.data.get('Set')}" /></p:column>
+						<p:column headerText="Out"><h:outputText value="#{ano.data.get('Out')}" /></p:column>
+						<p:column headerText="Nov"><h:outputText value="#{ano.data.get('Nov')}" /></p:column>
+						<p:column headerText="Dez"><h:outputText value="#{ano.data.get('Dez')}" /></p:column>
+					
+					</p:dataTable>
+				</p:panel>
+				
+				<p:panel id="participacao" header="Participação na Santa Ceia">
+					<p:barChart animate="false" value="#{relSecretariaView.participacao}" legendPosition="ne" 
+					style="width:80%;" />
+					
+					<p:dataTable var="part" value="#{relSecretariaView.participacao.series}" style="width:80%;">
+						<p:column><b><h:outputText value="#{part.label}" /></b></p:column>
+						<p:column headerText="0x"><h:outputText value="#{part.data.get('0x')}" /></p:column>
+						<p:column headerText="1x a 5x"><h:outputText value="#{part.data.get('1x')}" /></p:column>
+						<p:column headerText="6x a 10x"><h:outputText value="#{part.data.get('6x')}" /></p:column>
+						<p:column headerText="11x a 15x"><h:outputText value="#{part.data.get('11x')}" /></p:column>
+						<p:column headerText="16x a 20x"><h:outputText value="#{part.data.get('16x')}" /></p:column>
+						<p:column headerText="21x acima"><h:outputText value="#{part.data.get('21x')}" /></p:column>
+					</p:dataTable>
+				
+				</p:panel>
+			
+			</h:panelGrid>
+			</div>
+			
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

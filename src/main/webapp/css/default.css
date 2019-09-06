@@ -1,0 +1,44 @@
+.ui-widget, .ui-widget .ui-widget, .ui-widget .ui-widget .ui-widget  {
+    font-size: 90% !important;
+}
+
+.ui-dt-c {
+	font-size: 90%;
+}
+
+.semBorda {
+	background: none !important;
+}
+.semBorda tr, .semBorda td {
+	background: none !important;
+	border: none !important;
+}
+
+#infologin table tbody tr td {
+    text-align: right;
+}
+
+.aviso {
+	font-size: 100%;
+	font-weight: bold;
+	color: red;
+}
+
+.ui-picklist.ceia .ui-picklist-list{
+	width: 300px;
+}
+
+.cad-bar-style .ui-progressbar-value {
+	background: #FF8C00;
+}
+
+.ui-datalist-item:empty {
+    display: none;
+}
+
+.textoficha {
+	width: 30%;
+}
+.valorficha {
+	width: 70%;
+}

@@ -1,0 +1,94 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+		<!-- <p:panel rendered="#{securityContext.loggedIn}">
+			<center>#{messages['main.app.welcome']}</center>
+		</p:panel>
+		<p:spacer/> -->
+		<p:panel header="#{messages['dados.gerais']} - #{securityContext.user.congregacao.nome}" rendered="#{securityContext.loggedIn}">
+			<h:panelGrid id="geral" columns="2" width="100%" >
+			
+				<p:fieldset legend="Membros" toggleable="false" width="100%" >
+					<p:pieChart value="#{geralView.membros1}" legendPosition="s" 
+						id="membros1" style="width:350px;height:300px" showDataLabels="true" dataFormat="value" />
+				</p:fieldset>
+				
+				<p:fieldset legend="Frequencia" toggleable="false" width="100%" >
+					<p:barChart animate="true" value="#{geralView.frequencia}" legendPosition="ne" style="width:100%;" />
+				</p:fieldset>
+				
+				<p:fieldset legend="Dados" toggleable="false" width="100%" >
+					<h:panelGrid id="tabeladados" columns="2">
+						<h:outputText value="Membros Ativos: " />
+						<h:outputText value="#{geralView.comungantes+geralView.naocomungantes} " />
+						
+						<h:outputText value="Comungantes: " />
+						<h:outputText value="#{geralView.comungantes} " />
+						
+						<h:outputText value="Cultos este ano: " />
+						<h:outputText value="#{geralView.cultos} " />
+						
+						<h:outputText value="Visitantes este ano: " />
+						<h:outputText value="#{geralView.visitantes} " />
+						
+					</h:panelGrid>
+				</p:fieldset>
+				
+				<p:fieldset legend="Cadastro" toggleable="false" width="100%" >
+					<h:panelGrid id="tabelacad" columns="2">
+					
+						<p:meterGaugeChart value="#{geralView.qualidade}" id="quality" 
+							style="width:350px;height:220px" title="Dados do Cadastro" 
+							labelHeightAdjust="200" intervalOuterRadius="110"
+							seriesColors="cc6666, E7E658, 66cc66"/>
+						
+						<p:meterGaugeChart value="#{geralView.atualiza}" id="valid" 
+							style="width:350px;height:220px" title="Recadastramentos"
+							labelHeightAdjust="200" intervalOuterRadius="110"
+							seriesColors="66cc66, E7E658, cc6666"/>
+						
+						<h:outputText value="Cadastro #{geralView.cadastro}% completo" />
+						
+						<h:outputText value="Necessário recadastrar #{geralView.validade}% dos membros" />
+						
+						<h:outputLink value="analisecadastro.jsf" style="font-size: 11px;">Ver pendências</h:outputLink>
+						
+						<h:outputText value="*Cadastros com mais de 1 ano sem atualização" style="font-size: 11px;" />
+						
+					</h:panelGrid>
+				</p:fieldset>
+				
+				<p:fieldset legend="Liturgia" toggleable="false" width="100%" >
+					Cor litúrgica: 
+				</p:fieldset>
+				
+				<p:fieldset legend="Alertas" toggleable="false" width="100%" >
+					<h:form>
+						<p:dataTable var="alert" value="#{geralView.alertas}" 
+							scrollable="true" scrollHeight="85px;">
+							<p:column width="20px;" >
+								<p:selectBooleanCheckbox>
+						            <p:ajax listener="#{alertaMB.marcaFeito}" >
+						            	<f:setPropertyActionListener target="#{alertaMB.idAlerta}" value="#{alert.id}"/>
+						            </p:ajax>
+						        </p:selectBooleanCheckbox>
+							</p:column>
+							
+							<p:column>
+								<h:outputText value="#{alert.texto}" />
+							</p:column>
+							
+						</p:dataTable>
+					</h:form>
+				</p:fieldset>
+			
+			</h:panelGrid>
+		</p:panel>
+		
+		<h:outputText value="&lt;script&gt; window.location.href='verPerfil.jsf';&lt;/script&gt;" rendered="#{securityContext.user.trocarSenha}" />
+		
+	</ui:define>
+
+</ui:composition>

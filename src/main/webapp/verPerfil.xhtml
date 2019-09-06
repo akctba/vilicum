@@ -1,0 +1,86 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" template="/template/main.xhtml">
+
+	<ui:define name="body">
+
+			<h:panelGrid id="grupos" columns="2" width="100%">
+
+			<h:form prependId="false" rendered="#{securityContext.loggedIn}">
+				<p:fieldset legend="#{messages['usuario.label']}" toggleable="false">
+					<h:panelGrid id="fields" columns="3">
+						
+						<h:outputLabel value="#{messages['usuario.label.login']}: " for="id" styleClass="text-input" />
+						<h:outputText id="id" value="#{securityContext.user.id}" />
+						<p:spacer/>
+						
+						<h:outputLabel value="#{messages['usuario.label.nome']}: " for="nome" styleClass="text-input" />
+						<h:outputText id="nome" value="#{securityContext.user.nome}" />
+						<p:spacer/>
+						
+						<h:outputLabel value="#{messages['usuario.label.email']}: " for="email" styleClass="text-input" />
+						<h:outputText id="email" value="#{securityContext.user.email}" />
+						<p:message for="email" />
+						
+						<h:outputLabel value="#{messages['usuario.label.congregacao']}: " for="congregacao" styleClass="text-input" />
+						<h:outputText id="Congnome" value="#{securityContext.user.congregacao.nome}" />
+						<p:spacer/>
+						
+						<h:outputLabel value="#{messages['usuario.label.ultimoAcesso']}: " for="ultimoAcesso" styleClass="text-input" />
+						<h:outputText id="ultimoAcesso" value="#{securityContext.user.ultimoAcesso}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+						<p:spacer/>
+									
+					</h:panelGrid>
+				</p:fieldset>
+			</h:form>
+				
+				<p:fieldset legend="Perfis de acesso" toggleable="false">
+					<p:spacer/>
+			        
+			        <p:dataList value="#{securityContext.user.perfis}" var="perf" itemType="disc">
+			        	#{perf.nome}
+			        </p:dataList>
+			        
+			        <p:spacer/>
+				</p:fieldset>
+		
+			<h:form prependId="false">
+				<p:fieldset legend="Alterar senha" toggleable="false">
+					<h:outputText value="#{messages['usuario.label.pwdtrocar']}"  styleClass="aviso" rendered="#{securityContext.user.trocarSenha}"  />
+					<h:panelGrid id="campossenha" columns="3">
+						<h:outputLabel value="#{messages['usuario.label.pwdatual']}: " for="atual" styleClass="text-input" />
+						<p:password id="atual" value="#{alterarSenhaMB.atual}"
+							title="#{messages['usuario.alt.pwdatual']}" />
+						<p:message for="atual" />
+					
+						<h:outputLabel value="#{messages['usuario.label.pwdnova']}: " for="nova" styleClass="text-input" />
+						<p:password id="nova" value="#{alterarSenhaMB.nova}" feedback="true"
+						promptLabel="#{messages['password.label.input']}" 
+					    weakLabel="#{messages['password.label.weak']}" 
+					    goodLabel="#{messages['password.label.good']}" 
+					    strongLabel="#{messages['password.label.strong']}" 
+							title="#{messages['usuario.alt.pwdnova']}" />
+						<p:message for="nova" />
+						
+						<h:outputLabel value="#{messages['usuario.label.pwdconfirmacao']}: " for="confirmacao" styleClass="text-input" />
+						<p:password id="confirmacao" value="#{alterarSenhaMB.confirmacao}" feedback="true"
+							promptLabel="#{messages['password.label.input']}" 
+						    weakLabel="#{messages['password.label.weak']}"  
+						    goodLabel="#{messages['password.label.good']}" 
+						    strongLabel="#{messages['password.label.strong']}" 
+							title="#{messages['usuario.alt.pwdconfirmacao']}" />
+						<p:message for="confirmacao" />
+						
+						<p:commandButton value="#{messages['button.save']}" action="#{alterarSenhaMB.update}" ajax="false" />
+					
+					</h:panelGrid>
+				</p:fieldset>
+				
+			</h:form>
+				
+			</h:panelGrid>
+	</ui:define>
+</ui:composition>
