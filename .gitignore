@@ -1,0 +1,3 @@
+# Ignorar alvo no nível superior
+target/
+/target/
