@@ -28,8 +28,11 @@ Someone who manages property or other affairs for someone else.
 - JSF
 - HTML
 - JavaScript
+- Jasper Reports
+- ...
 ### Backend
 - Java MVC
+- ...
 ### DBMS and O/RM
 - JPA
 - MySQL
