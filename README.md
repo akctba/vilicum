@@ -7,8 +7,10 @@ Someone who manages property or other affairs for someone else.
 
 ## Objectives of the system
 ### Membership and groups
+- CRUD of members, families, groups of work.
 
 ### Attendance
+- Inteface to register the attendance with easy search in a huge list os members.
 
 ### Correspondence
 
@@ -17,13 +19,18 @@ Someone who manages property or other affairs for someone else.
 ### Financial department
 
 ### Reports
+- Reports to suport the board meetings.
 
 ## Technologies involved
 
 ### Frontend
-
+- Primefaces
+- JSF
+- HTML
+- JavaScript
 ### Backend
-
+- Java MVC
 ### DBMS and O/RM
-
+- JPA
+- MySQL
 ## 
