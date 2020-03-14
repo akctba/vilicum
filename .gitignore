@@ -1,5 +1,9 @@
 # Ignorar alvo
+# Compiled class file
 *.class
-target/*
 
-
+# Log file
+*.log
+target/classes/
+target/test-classes/br/org/vilicum/business/Texto.class
+/target/
