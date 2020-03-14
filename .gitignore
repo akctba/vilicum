@@ -1,4 +1,6 @@
 # Ignorar alvo
-/target
-target/
 *.class
+/target/*
+
+
+/target/
