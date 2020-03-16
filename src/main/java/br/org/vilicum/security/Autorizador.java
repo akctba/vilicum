@@ -42,7 +42,6 @@ public class Autorizador implements Authorizer {
 
 	@Override
 	public boolean hasPermission(String resource, String operation) throws Exception {
-		// TODO Auto-generated method stub
 		logger.debug("Demoiselle perguntou sobre recurso %s operacao [%s]", resource, operation);
 		return true;
 	}
