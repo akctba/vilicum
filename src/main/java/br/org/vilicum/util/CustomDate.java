@@ -803,7 +803,8 @@ public final class CustomDate implements Serializable {
 	 * @return
 	 */
 	public static String convert(final double vlr) {
-		final Long l = Long.valueOf(new Double(vlr).longValue());
+		//final Long l = Long.valueOf(new Double(vlr).longValue());
+		final Long l = Long.valueOf((long)vlr);
 		return l.toString().length() >= 2 ? l.toString() : ("0" + l.toString());
 	}
 
